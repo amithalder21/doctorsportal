@@ -26,18 +26,27 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
     const dateParam = searchParams.get('date');
     
-    // Default to today if no date provided
-    let startDate = new Date();
-    startDate.setHours(0, 0, 0, 0);
-    
-    let endDate = new Date(startDate);
-    endDate.setDate(endDate.getDate() + 1);
+    // Parse the date as IST (UTC+5:30) to ensure actions performed at night 
+    // locally don't roll over to the previous day in UTC.
+    let startDate: Date;
+    let endDate: Date;
 
     if (dateParam) {
-      startDate = new Date(dateParam);
-      endDate = new Date(startDate);
-      endDate.setDate(endDate.getDate() + 1);
+      // User selected a date (e.g. '2026-09-20')
+      startDate = new Date(`${dateParam}T00:00:00+05:30`);
+    } else {
+      // Default to today in IST
+      // Get current UTC time
+      const now = new Date();
+      // Convert to IST string (YYYY-MM-DD)
+      const options: Intl.DateTimeFormatOptions = { timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit' };
+      const istDateString = now.toLocaleDateString('en-CA', options); // en-CA gives YYYY-MM-DD
+      
+      startDate = new Date(`${istDateString}T00:00:00+05:30`);
     }
+
+    endDate = new Date(startDate);
+    endDate.setDate(endDate.getDate() + 1);
 
     // 1. Get total PAID appointments for this exact date
     const paidLogsCount = await prisma.auditLog.count({

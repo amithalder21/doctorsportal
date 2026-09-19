@@ -133,3 +133,57 @@ export const getOtpEmail = (otp: string, role: string) => {
     </div>
   `;
 };
+
+export const getAppointmentCompletedEmail = (name: string, date: string) => {
+  return `
+    <div style="${baseStyles}">
+      <div style="${headerStyles}">
+        <h1 style="color: #132573; margin: 0;">Salute Care</h1>
+      </div>
+      <div style="font-size: 16px; line-height: 1.6;">
+        <p>Dear <strong>${name}</strong>,</p>
+        <p>Thank you for visiting Salute Care on <strong>${date}</strong>. We hope you had a comfortable and satisfactory experience.</p>
+        
+        <div style="background-color: #e8f5e9; padding: 20px; border-radius: 12px; margin: 25px 0; border: 1px solid #c8e6c9;">
+          <h3 style="margin-top: 0; color: #2e7d32;">Post-Consultation</h3>
+          <p style="margin: 5px 0;">If you have any further questions about your prescription, or if you need to schedule a follow-up visit, please don't hesitate to reach out to us.</p>
+        </div>
+
+        <p>Your health and well-being are our top priority. We wish you a speedy recovery and excellent health!</p>
+        
+        <p style="margin-top: 30px;">Best Regards,<br/><strong>Dr. Ankit Gaur & The Salute Care Team</strong></p>
+      </div>
+      <div style="${footerStyles}">
+        <p>© ${new Date().getFullYear()} Salute Care Clinic. All rights reserved.</p>
+      </div>
+    </div>
+  `;
+};
+
+export const getPaymentReceiptEmail = (name: string, date: string, appointmentId: string) => {
+  return `
+    <div style="${baseStyles}">
+      <div style="${headerStyles}">
+        <h1 style="color: #132573; margin: 0;">Salute Care</h1>
+      </div>
+      <div style="font-size: 16px; line-height: 1.6;">
+        <p>Dear <strong>${name}</strong>,</p>
+        <p>This email is to confirm that we have successfully received your payment.</p>
+        
+        <div style="background-color: #E6F1F7; padding: 20px; border-radius: 12px; margin: 25px 0; border: 1px solid #c2dbe9;">
+          <h3 style="margin-top: 0; color: #132573;">Payment Confirmation</h3>
+          <p style="margin: 5px 0;"><strong>Appointment Date:</strong> ${date}</p>
+          <p style="margin: 5px 0;"><strong>Reference ID:</strong> ${appointmentId}</p>
+          <p style="margin: 5px 0;"><strong>Status:</strong> <span style="color: #2e7d32; font-weight: bold;">PAID</span></p>
+        </div>
+
+        <p>Thank you for choosing Salute Care.</p>
+        
+        <p style="margin-top: 30px;">Best Regards,<br/><strong>The Salute Care Team</strong></p>
+      </div>
+      <div style="${footerStyles}">
+        <p>© ${new Date().getFullYear()} Salute Care Clinic. All rights reserved.</p>
+      </div>
+    </div>
+  `;
+};

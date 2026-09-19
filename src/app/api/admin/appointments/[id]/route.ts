@@ -101,27 +101,57 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
       }
     }
 
-    // Send email notification based on status
-    if (status === 'CONFIRMED' || status === 'CANCELLED') {
-      const subject = status === 'CONFIRMED' 
-        ? 'Your Appointment is Confirmed' 
-        : 'Your Appointment has been Cancelled';
-      
-      const { getAppointmentConfirmedEmail, getAppointmentCancelledEmail } = await import('@/lib/email-templates');
-      
-      const htmlContent = status === 'CONFIRMED'
-        ? getAppointmentConfirmedEmail(updated.name, new Date(updated.date).toLocaleDateString(), updated.time)
-        : getAppointmentCancelledEmail(updated.name, new Date(updated.date).toLocaleDateString(), updated.time);
+    // Send email notifications
+    if (status || paymentStatus) {
+      const { 
+        getAppointmentConfirmedEmail, 
+        getAppointmentCancelledEmail,
+        getAppointmentCompletedEmail,
+        getPaymentReceiptEmail
+      } = await import('@/lib/email-templates');
 
-      try {
-        await sendEmail({
-          to: updated.email,
-          subject,
-          html: htmlContent,
-        });
-      } catch (emailError) {
-        console.error('Failed to send status email:', emailError);
-        // We still want to return success for the DB update even if email fails
+      const dateStr = new Date(updated.date).toLocaleDateString();
+
+      // Send status change email
+      if (status && status !== existingAppt.status) {
+        let subject = '';
+        let htmlContent = '';
+
+        if (status === 'CONFIRMED') {
+          subject = 'Your Appointment is Confirmed';
+          htmlContent = getAppointmentConfirmedEmail(updated.name, dateStr, updated.time);
+        } else if (status === 'CANCELLED') {
+          subject = 'Your Appointment has been Cancelled';
+          htmlContent = getAppointmentCancelledEmail(updated.name, dateStr, updated.time);
+        } else if (status === 'COMPLETED') {
+          subject = 'Thank You for Visiting Salute Care';
+          htmlContent = getAppointmentCompletedEmail(updated.name, dateStr);
+        }
+
+        if (subject && htmlContent) {
+          try {
+            await sendEmail({
+              to: updated.email,
+              subject,
+              html: htmlContent,
+            });
+          } catch (emailError) {
+            console.error('Failed to send status email:', emailError);
+          }
+        }
+      }
+
+      // Send payment receipt email
+      if (paymentStatus === 'PAID' && existingAppt.paymentStatus !== 'PAID') {
+        try {
+          await sendEmail({
+            to: updated.email,
+            subject: 'Payment Receipt - Salute Care',
+            html: getPaymentReceiptEmail(updated.name, dateStr, updated.id),
+          });
+        } catch (emailError) {
+          console.error('Failed to send payment receipt email:', emailError);
+        }
       }
     }
 
