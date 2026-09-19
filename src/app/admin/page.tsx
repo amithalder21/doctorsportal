@@ -74,18 +74,27 @@ export default async function AdminDashboard() {
                         </div>
                       </td>
                       <td className="p-5">
-                        <p className="text-sm text-gray-600 max-w-xs truncate mb-2" title={apt.message || ''}>
-                          {apt.message || <span className="text-gray-300 italic">No message</span>}
-                        </p>
-                        {apt.documentUrl && (
-                          <div className="flex flex-wrap gap-2">
-                            {apt.documentUrl.split(',').map((url, idx) => (
-                              <a key={idx} href={`/api/admin/record?url=${encodeURIComponent(url)}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs font-bold text-salute-secondary hover:text-[#ff7575] bg-salute-secondary/10 px-2 py-1 rounded">
-                                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg>
-                                Record {idx + 1}
-                              </a>
-                            ))}
-                          </div>
+                        {role === 'RECEPTION' ? (
+                          <p className="text-sm text-gray-400 italic flex items-center gap-1">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                            Hidden for Patient Privacy
+                          </p>
+                        ) : (
+                          <>
+                            <p className="text-sm text-gray-600 max-w-xs truncate mb-2" title={apt.message || ''}>
+                              {apt.message || <span className="text-gray-300 italic">No message</span>}
+                            </p>
+                            {apt.documentUrl && (
+                              <div className="flex flex-wrap gap-2">
+                                {apt.documentUrl.split(',').map((url, idx) => (
+                                  <a key={idx} href={`/api/admin/record?url=${encodeURIComponent(url)}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs font-bold text-salute-secondary hover:text-[#ff7575] bg-salute-secondary/10 px-2 py-1 rounded">
+                                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg>
+                                    Record {idx + 1}
+                                  </a>
+                                ))}
+                              </div>
+                            )}
+                          </>
                         )}
                       </td>
                       <td className="p-5">
