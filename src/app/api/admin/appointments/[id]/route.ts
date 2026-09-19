@@ -11,10 +11,12 @@ async function verifyAdminAccess() {
   const cookieStore = await cookies();
   const role = cookieStore.get('admin_role')?.value;
   
-  if (!role) {
-    return { authorized: false, role: null };
+  const adminId = cookieStore.get('admin_id')?.value;
+  
+  if (!role || !adminId) {
+    return { authorized: false, role: null, adminId: null };
   }
-  return { authorized: true, role };
+  return { authorized: true, role, adminId };
 }
 
 // PATCH: Update appointment status (SUPERADMIN or ADMIN)
@@ -74,6 +76,30 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
       where: { id },
       data: updateData
     });
+
+    // Create Audit Logs for the changes
+    if (auth.adminId) {
+      if (status && status !== existingAppt.status) {
+        await prisma.auditLog.create({
+          data: {
+            adminId: auth.adminId,
+            action: `STATUS_CHANGED_${status}`,
+            targetId: id,
+            details: `Status changed from ${existingAppt.status} to ${status}`,
+          }
+        });
+      }
+      if (paymentStatus && paymentStatus !== existingAppt.paymentStatus) {
+        await prisma.auditLog.create({
+          data: {
+            adminId: auth.adminId,
+            action: `PAYMENT_MARKED_${paymentStatus}`,
+            targetId: id,
+            details: transactionId ? `Transaction ID: ${transactionId}` : 'Manual status update',
+          }
+        });
+      }
+    }
 
     // Send email notification based on status
     if (status === 'CONFIRMED' || status === 'CANCELLED') {

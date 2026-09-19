@@ -4,6 +4,8 @@ import AdminActions from '@/components/AdminActions';
 import AdminPayment from '@/components/AdminPayment';
 import AdminDateFilter from './AdminDateFilter';
 
+import AdminReconciliation from '@/components/AdminReconciliation';
+
 export const dynamic = 'force-dynamic';
 
 const prisma = new PrismaClient();
@@ -59,6 +61,10 @@ export default async function AdminDashboard({ searchParams }: { searchParams: P
             </div>
           </div>
         </div>
+
+        {role === 'SUPERADMIN' && (
+          <AdminReconciliation selectedDate={params.date || ''} />
+        )}
 
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
           <div className="overflow-x-auto">

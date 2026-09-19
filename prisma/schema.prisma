@@ -58,6 +58,7 @@ model User {
   appointments       Appointment[] @relation("PatientAppointments")
   doctorAppointments Appointment[] @relation("DoctorAppointments")
   blockedSlots       BlockedSlot[] @relation("DoctorBlockedSlots")
+  auditLogs          AuditLog[]    @relation("AdminAuditLogs")
 }
 
 model BlockedSlot {
@@ -71,4 +72,14 @@ model BlockedSlot {
   doctorId  String
   doctor    User     @relation("DoctorBlockedSlots", fields: [doctorId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
+}
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  adminId     String
+  admin       User     @relation("AdminAuditLogs", fields: [adminId], references: [id])
+  action      String   // e.g., "PAYMENT_MARKED_PAID", "STATUS_CHANGED_COMPLETED"
+  targetId    String   // The Appointment ID
+  details     String?  // Context (e.g., "Transaction ID added: UPI123")
+  createdAt   DateTime @default(now())
 }
