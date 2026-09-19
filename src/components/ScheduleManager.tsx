@@ -25,7 +25,7 @@ export default function ScheduleManager({ role, adminId }: { role: string | null
 
   const fetchBlockedSlots = async () => {
     try {
-      const res = await fetch('/api/admin/schedule');
+      const res = await fetch('/api/admin/schedule', { cache: 'no-store' });
       const data = await res.json();
       if (data.blockedSlots) {
         setBlockedSlots(data.blockedSlots);
@@ -191,6 +191,13 @@ export default function ScheduleManager({ role, adminId }: { role: string | null
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
           <div className="p-6 border-b border-gray-100 flex items-center justify-between">
             <h2 className="text-xl font-bold text-salute-dark font-heading">Current Blocks</h2>
+            <button 
+              onClick={fetchBlockedSlots}
+              className="text-sm font-bold text-salute-secondary hover:text-[#ff7575] flex items-center gap-1.5 transition-colors"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+              Refresh
+            </button>
           </div>
           
           <div className="overflow-x-auto">
