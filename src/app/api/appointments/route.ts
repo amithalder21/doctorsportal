@@ -89,21 +89,48 @@ export async function POST(req: Request) {
 
     // 3.5 Check if doctor is on holiday / blocked
     if (doctorId) {
-      const blockedSlot = await prisma.blockedSlot.findFirst({
+      const blockedSlotsRecords = await prisma.blockedSlot.findMany({
         where: {
           doctorId: doctorId,
-          date: {
-            gte: startOfDay,
-            lte: endOfDay,
-          },
-          OR: [
-            { time: null }, // Entire day blocked
-            { time: time }  // Specific time blocked
-          ]
+          date: { lte: endOfDay },
+          endDate: { gte: startOfDay }
         }
       });
 
-      if (blockedSlot) {
+      const { TIME_SLOTS } = await import('@/lib/constants');
+      let isBlocked = false;
+
+      for (const slot of blockedSlotsRecords) {
+        if (!slot.time || !slot.endTime) {
+          isBlocked = true;
+          break;
+        }
+
+        const queryDayStart = startOfDay.getTime();
+        const slotStartDay = new Date(slot.date).getTime();
+        const slotEndDay = new Date(slot.endDate).getTime();
+
+        if (queryDayStart > slotStartDay && queryDayStart < slotEndDay) {
+          isBlocked = true;
+          break;
+        }
+
+        const startIndex = TIME_SLOTS.indexOf(slot.time);
+        const endIndex = TIME_SLOTS.indexOf(slot.endTime);
+        const targetIndex = TIME_SLOTS.indexOf(time);
+
+        if (slotStartDay === slotEndDay) {
+          if (targetIndex >= startIndex && targetIndex <= endIndex) isBlocked = true;
+        } else if (queryDayStart === slotStartDay) {
+          if (targetIndex >= startIndex) isBlocked = true;
+        } else if (queryDayStart === slotEndDay) {
+          if (targetIndex <= endIndex) isBlocked = true;
+        }
+        
+        if (isBlocked) break;
+      }
+
+      if (isBlocked) {
         return NextResponse.json({ error: 'The selected doctor is not available at this date and time.' }, { status: 409 });
       }
     }

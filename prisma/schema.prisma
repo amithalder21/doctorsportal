@@ -62,15 +62,13 @@ model User {
 
 model BlockedSlot {
   id        String   @id @default(cuid())
-  date      DateTime
-  time      String?  // If null, the entire day is blocked. If string, only that specific time slot is blocked.
-  reason    String?  // Optional context for the doctor (e.g., "Surgery", "Vacation")
+  date      DateTime // Serves as Start Date
+  endDate   DateTime // End Date (can be same as date for a single day)
+  time      String?  // Serves as Start Time (null = full day)
+  endTime   String?  // End Time (if null but time is set, it's just a single slot)
+  reason    String?  // Optional context
   
   doctorId  String
   doctor    User     @relation("DoctorBlockedSlots", fields: [doctorId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
-
-  // A doctor cannot have duplicate blocked slot entries for the exact same date and time
-  // Note: time is optional, so Prisma allows nulls in unique constraints
-  @@unique([date, time, doctorId])
 }

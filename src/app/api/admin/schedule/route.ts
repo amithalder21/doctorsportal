@@ -61,7 +61,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Unauthorized: Doctor ID missing' }, { status: 401 });
     }
 
-    const { date, time, reason, doctorId } = await req.json();
+    const { date, endDate, time, endTime, reason, doctorId } = await req.json();
 
     if (!date) {
       return NextResponse.json({ error: 'Date is required' }, { status: 400 });
@@ -73,16 +73,25 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: 'Doctor ID is required' }, { status: 400 });
     }
 
+    const start = new Date(date);
+    const end = endDate ? new Date(endDate) : start;
+
+    if (end < start) {
+        return NextResponse.json({ error: 'End date cannot be before start date' }, { status: 400 });
+    }
+
     const blockedSlot = await prisma.blockedSlot.create({
       data: {
-        date: new Date(date),
+        date: start,
+        endDate: end,
         time: time || null,
+        endTime: endTime || null,
         reason: reason || null,
         doctorId: targetDoctorId
       }
     });
 
-    return NextResponse.json({ success: true, blockedSlot });
+    return NextResponse.json({ success: true, blockedSlot }, { status: 201 });
   } catch (error: any) {
     console.error('Schedule POST Error:', error);
     if (error.code === 'P2002') {

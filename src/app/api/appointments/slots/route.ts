@@ -38,21 +38,51 @@ export async function GET(request: NextRequest) {
       }
     });
 
-    // Fetch BlockedSlots for this doctor on this date
+    // Fetch BlockedSlots for this doctor that overlap with this date
     const blockedSlotsRecords = await prisma.blockedSlot.findMany({
       where: {
         doctorId: doctorIdParam,
-        date: {
-          gte: startOfDay,
-          lte: endOfDay,
-        }
+        date: { lte: endOfDay },
+        endDate: { gte: startOfDay }
       }
     });
 
-    // Check if the entire day is blocked (time is null)
-    const isFullDayBlocked = blockedSlotsRecords.some(slot => slot.time === null);
+    const { TIME_SLOTS } = await import('@/lib/constants');
+    let isHoliday = false;
+    let specificBlockedTimes = new Set<string>();
 
-    if (isFullDayBlocked) {
+    for (const slot of blockedSlotsRecords) {
+      if (!slot.time || !slot.endTime) {
+        isHoliday = true;
+        break;
+      }
+
+      const queryDayStart = startOfDay.getTime();
+      const slotStartDay = new Date(slot.date).getTime();
+      const slotEndDay = new Date(slot.endDate).getTime();
+
+      if (queryDayStart > slotStartDay && queryDayStart < slotEndDay) {
+        // We are completely enveloped by a multi-day event
+        isHoliday = true;
+        break;
+      }
+
+      const startIndex = TIME_SLOTS.indexOf(slot.time);
+      const endIndex = TIME_SLOTS.indexOf(slot.endTime);
+
+      if (slotStartDay === slotEndDay) {
+        // Single day event
+        TIME_SLOTS.slice(startIndex, endIndex + 1).forEach(t => specificBlockedTimes.add(t));
+      } else if (queryDayStart === slotStartDay) {
+        // First day of multi-day event
+        TIME_SLOTS.slice(startIndex).forEach(t => specificBlockedTimes.add(t));
+      } else if (queryDayStart === slotEndDay) {
+        // Last day of multi-day event
+        TIME_SLOTS.slice(0, endIndex + 1).forEach(t => specificBlockedTimes.add(t));
+      }
+    }
+
+    if (isHoliday) {
       return NextResponse.json({ bookedSlots: [], isHoliday: true });
     }
 
@@ -60,7 +90,6 @@ export async function GET(request: NextRequest) {
     const bookedSlots = appointments.map(apt => apt.time);
 
     // Merge specific blocked time slots
-    const specificBlockedTimes = blockedSlotsRecords.filter(slot => slot.time !== null).map(slot => slot.time as string);
     const allUnavailableSlots = Array.from(new Set([...bookedSlots, ...specificBlockedTimes]));
 
     return NextResponse.json({ bookedSlots: allUnavailableSlots, isHoliday: false });

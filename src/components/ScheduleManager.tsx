@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import { TIME_SLOTS } from '@/lib/constants';
 
 export default function ScheduleManager({ role, adminId }: { role: string | null, adminId: string | null }) {
   const [blockedSlots, setBlockedSlots] = useState<any[]>([]);
@@ -8,20 +9,15 @@ export default function ScheduleManager({ role, adminId }: { role: string | null
   
   const [formData, setFormData] = useState({
     date: '',
+    endDate: '',
     time: '',
+    endTime: '',
     reason: '',
     doctorId: ''
   });
   
   const [isLoading, setIsLoading] = useState(false);
   const [status, setStatus] = useState<{type: 'success' | 'error', message: string} | null>(null);
-
-  const timeSlots = [
-    "09:00 AM", "09:30 AM", "10:00 AM", "10:30 AM",
-    "11:00 AM", "11:30 AM", "12:00 PM", "12:30 PM",
-    "02:00 PM", "02:30 PM", "03:00 PM", "03:30 PM",
-    "04:00 PM", "04:30 PM", "05:00 PM", "05:30 PM"
-  ];
 
   const fetchBlockedSlots = async () => {
     try {
@@ -76,7 +72,7 @@ export default function ScheduleManager({ role, adminId }: { role: string | null
       }
       
       setStatus({ type: 'success', message: 'Successfully added to schedule.' });
-      setFormData({ date: '', time: '', reason: '', doctorId: '' });
+      setFormData({ date: '', endDate: '', time: '', endTime: '', reason: '', doctorId: '' });
       fetchBlockedSlots();
       
       setTimeout(() => setStatus(null), 3000);
@@ -138,30 +134,57 @@ export default function ScheduleManager({ role, adminId }: { role: string | null
               </div>
             )}
             
-            <div>
-              <label className="block text-sm font-bold text-gray-600 mb-1">Date</label>
-              <input 
-                required
-                type="date" 
-                value={formData.date}
-                onChange={e => setFormData({...formData, date: e.target.value})}
-                className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-salute-dark focus:ring-2 focus:ring-salute-secondary outline-none transition-all"
-              />
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-bold text-gray-600 mb-1">From Date</label>
+                <input 
+                  required
+                  type="date" 
+                  value={formData.date}
+                  onChange={e => setFormData({...formData, date: e.target.value})}
+                  className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-salute-dark focus:ring-2 focus:ring-salute-secondary outline-none transition-all"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-bold text-gray-600 mb-1">To Date (Optional)</label>
+                <input 
+                  type="date" 
+                  min={formData.date}
+                  value={formData.endDate}
+                  onChange={e => setFormData({...formData, endDate: e.target.value})}
+                  className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-salute-dark focus:ring-2 focus:ring-salute-secondary outline-none transition-all"
+                />
+              </div>
             </div>
             
-            <div>
-              <label className="block text-sm font-bold text-gray-600 mb-1">Time Slot (Optional)</label>
-              <select 
-                value={formData.time} 
-                onChange={e => setFormData({...formData, time: e.target.value})}
-                className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-salute-dark focus:ring-2 focus:ring-salute-secondary outline-none transition-all"
-              >
-                <option value="">Full Day (Holiday)</option>
-                {timeSlots.map(t => (
-                  <option key={t} value={t}>{t}</option>
-                ))}
-              </select>
-              <p className="text-xs text-gray-400 mt-1">Leave as "Full Day" to block the entire date.</p>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-bold text-gray-600 mb-1">From Time</label>
+                <select 
+                  value={formData.time} 
+                  onChange={e => setFormData({...formData, time: e.target.value})}
+                  className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-salute-dark focus:ring-2 focus:ring-salute-secondary outline-none transition-all"
+                >
+                  <option value="">Full Day</option>
+                  {TIME_SLOTS.map(t => (
+                    <option key={t} value={t}>{t}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-bold text-gray-600 mb-1">To Time</label>
+                <select 
+                  value={formData.endTime} 
+                  disabled={!formData.time}
+                  onChange={e => setFormData({...formData, endTime: e.target.value})}
+                  className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-salute-dark focus:ring-2 focus:ring-salute-secondary outline-none transition-all disabled:opacity-50"
+                >
+                  <option value="">-</option>
+                  {TIME_SLOTS.map(t => (
+                    <option key={t} value={t}>{t}</option>
+                  ))}
+                </select>
+              </div>
             </div>
             
             <div>
@@ -220,41 +243,51 @@ export default function ScheduleManager({ role, adminId }: { role: string | null
                     </td>
                   </tr>
                 ) : (
-                  blockedSlots.map((block) => (
-                    <tr key={block.id} className="hover:bg-gray-50/50 transition-colors">
-                      <td className="p-4">
-                        <div className="font-bold text-salute-dark">
-                          {new Date(block.date).toLocaleDateString()}
-                        </div>
-                        <div className="text-xs font-bold text-salute-secondary mt-0.5">
-                          {block.time || 'FULL DAY HOLIDAY'}
-                        </div>
-                      </td>
-                      {(role === 'SUPERADMIN' || role === 'RECEPTION') && (
+                  blockedSlots.map((block) => {
+                    const startStr = new Date(block.date).toLocaleDateString();
+                    const endStr = new Date(block.endDate).toLocaleDateString();
+                    const dateDisplay = startStr === endStr ? startStr : `${startStr} - ${endStr}`;
+                    
+                    const timeDisplay = block.time 
+                      ? (block.endTime && block.endTime !== block.time ? `${block.time} to ${block.endTime}` : block.time)
+                      : 'FULL DAY HOLIDAY';
+
+                    return (
+                      <tr key={block.id} className="hover:bg-gray-50/50 transition-colors">
                         <td className="p-4">
-                          <span className="text-sm font-medium text-gray-700">
-                            {block.doctor?.name?.startsWith('Dr.') 
-                              ? block.doctor.name 
-                              : `Dr. ${block.doctor?.name || block.doctor?.email?.split('@')[0]}`}
+                          <div className="font-bold text-salute-dark">
+                            {dateDisplay}
+                          </div>
+                          <div className="text-xs font-bold text-salute-secondary mt-0.5">
+                            {timeDisplay}
+                          </div>
+                        </td>
+                        {(role === 'SUPERADMIN' || role === 'RECEPTION') && (
+                          <td className="p-4">
+                            <span className="text-sm font-medium text-gray-700">
+                              {block.doctor?.name?.startsWith('Dr.') 
+                                ? block.doctor.name 
+                                : `Dr. ${block.doctor?.name || block.doctor?.email?.split('@')[0]}`}
+                            </span>
+                          </td>
+                        )}
+                        <td className="p-4">
+                          <span className="text-sm text-gray-600">
+                            {block.reason || '-'}
                           </span>
                         </td>
-                      )}
-                      <td className="p-4">
-                        <span className="text-sm text-gray-600">
-                          {block.reason || '-'}
-                        </span>
-                      </td>
-                      <td className="p-4 text-right">
-                        <button 
-                          onClick={() => handleDelete(block.id)}
-                          className="text-red-500 hover:text-red-700 hover:bg-red-50 p-2 rounded-lg transition-colors inline-flex"
-                          title="Remove Block"
-                        >
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                        </button>
-                      </td>
-                    </tr>
-                  ))
+                        <td className="p-4 text-right">
+                          <button 
+                            onClick={() => handleDelete(block.id)}
+                            className="text-red-500 hover:text-red-700 hover:bg-red-50 p-2 rounded-lg transition-colors inline-flex"
+                            title="Remove Block"
+                          >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })
                 )}
               </tbody>
             </table>

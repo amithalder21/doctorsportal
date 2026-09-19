@@ -3,8 +3,11 @@
 import { useState, useRef, useEffect } from 'react';
 import { upload } from '@vercel/blob/client';
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
+import { TIME_SLOTS } from '@/lib/constants';
 
-export default function Contact() {
+export default function Contact({ onBookingComplete }: { onBookingComplete?: () => void }) {
+  const router = useRouter();
   const [date, setDate] = useState('');
   const [timeSlot, setTimeSlot] = useState('');
   const [doctorId, setDoctorId] = useState('');
@@ -21,16 +24,7 @@ export default function Contact() {
     website: '' // honeypot field for spam prevention
   });
   const [status, setStatus] = useState<{ type: 'idle' | 'loading' | 'success' | 'error', message?: string }>({ type: 'idle' });
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  
-  const timeSlots = [
-    "09:00 AM", "09:30 AM", "10:00 AM", "10:30 AM",
-    "11:00 AM", "11:30 AM", "12:00 PM", "12:30 PM",
-    "02:00 PM", "02:30 PM", "03:00 PM", "03:30 PM",
-    "04:00 PM", "04:30 PM", "05:00 PM", "05:30 PM"
-  ];
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const fileInputRef = useRef<HTMLInputElement>(null);  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -292,7 +286,7 @@ export default function Contact() {
                   </div>
                 ) : (
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                    {timeSlots.map((time) => {
+                    {TIME_SLOTS.map((time) => {
                       const isBooked = bookedSlots.includes(time);
                       return (
                         <label key={time} className={isBooked ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}>
