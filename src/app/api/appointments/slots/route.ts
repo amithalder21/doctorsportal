@@ -8,8 +8,10 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const dateParam = searchParams.get('date');
 
-    if (!dateParam) {
-      return new NextResponse('Missing date parameter', { status: 400 });
+    const doctorIdParam = searchParams.get('doctorId');
+
+    if (!dateParam || !doctorIdParam) {
+      return new NextResponse('Missing date or doctorId parameter', { status: 400 });
     }
 
     // Parse the date to start and end of day in UTC to catch all appointments for that date
@@ -19,9 +21,10 @@ export async function GET(request: NextRequest) {
     const endOfDay = new Date(dateParam);
     endOfDay.setUTCHours(23, 59, 59, 999);
 
-    // Find all appointments on this date that are not CANCELLED
+    // Find all appointments on this date that are not CANCELLED for this doctor
     const appointments = await prisma.appointment.findMany({
       where: {
+        doctorId: doctorIdParam,
         date: {
           gte: startOfDay,
           lte: endOfDay,

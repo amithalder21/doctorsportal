@@ -6,6 +6,7 @@ export async function POST() {
   // Clear all possible auth cookies
   response.cookies.delete('admin_session');
   response.cookies.delete('admin_role');
+  response.cookies.delete('admin_id');
   response.cookies.delete('patient_session');
   response.cookies.delete('patient_email');
 

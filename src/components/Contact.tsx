@@ -7,6 +7,8 @@ import { motion } from 'framer-motion';
 export default function Contact() {
   const [date, setDate] = useState('');
   const [timeSlot, setTimeSlot] = useState('');
+  const [doctorId, setDoctorId] = useState('');
+  const [doctors, setDoctors] = useState<{id: string, name: string | null, email: string}[]>([]);
   const [bookedSlots, setBookedSlots] = useState<string[]>([]);
   const [isLoadingSlots, setIsLoadingSlots] = useState(false);
   const [formData, setFormData] = useState({
@@ -31,7 +33,16 @@ export default function Contact() {
   };
 
   useEffect(() => {
-    if (!date) {
+    fetch('/api/doctors')
+      .then(res => res.json())
+      .then(data => {
+        if (data.doctors) setDoctors(data.doctors);
+      })
+      .catch(console.error);
+  }, []);
+
+  useEffect(() => {
+    if (!date || !doctorId) {
       setBookedSlots([]);
       return;
     }
@@ -39,7 +50,7 @@ export default function Contact() {
     const fetchBookedSlots = async () => {
       setIsLoadingSlots(true);
       try {
-        const res = await fetch(`/api/appointments/slots?date=${date}`);
+        const res = await fetch(`/api/appointments/slots?date=${date}&doctorId=${doctorId}`);
         const data = await res.json();
         if (res.ok) {
           setBookedSlots(data.bookedSlots || []);
@@ -56,7 +67,7 @@ export default function Contact() {
     };
 
     fetchBookedSlots();
-  }, [date, timeSlot]);
+  }, [date, doctorId, timeSlot]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -79,6 +90,11 @@ export default function Contact() {
     const cleanedPhone = formData.phone.replace(/[\s-]/g, '');
     if (!phoneRegex.test(cleanedPhone)) {
       setStatus({ type: 'error', message: 'Please enter a valid 10-digit Indian phone number.' });
+      return;
+    }
+
+    if (!doctorId) {
+      setStatus({ type: 'error', message: 'Please select a doctor.' });
       return;
     }
 
@@ -113,7 +129,7 @@ export default function Contact() {
       const res = await fetch('/api/appointments', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...formData, date, time: timeSlot, documentUrl }),
+        body: JSON.stringify({ ...formData, date, time: timeSlot, documentUrl, doctorId }),
       });
       
       const data = await res.json();
@@ -228,6 +244,17 @@ export default function Contact() {
                   <input required type="email" name="email" value={formData.email} onChange={handleInputChange} className="w-full px-5 py-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:ring-2 focus:ring-salute-secondary focus:border-transparent outline-none transition-all backdrop-blur-sm" placeholder="jane@example.com" />
                 </div>
                 <div className="space-y-2">
+                  <label className="text-sm font-bold text-white/80 uppercase tracking-wide">Select Doctor</label>
+                  <select required value={doctorId} onChange={(e) => setDoctorId(e.target.value)} className="w-full px-5 py-4 rounded-xl bg-white/10 border border-white/20 text-white focus:ring-2 focus:ring-salute-secondary focus:border-transparent outline-none transition-all backdrop-blur-sm [&>option]:text-salute-dark">
+                    <option value="" disabled>Choose a Doctor</option>
+                    {doctors.map(doc => (
+                      <option key={doc.id} value={doc.id}>
+                        {doc.name || `Dr. ${doc.email.split('@')[0]}`}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="space-y-2">
                   <label className="text-sm font-bold text-white/80 uppercase tracking-wide">Preferred Date</label>
                   <input required type="date" value={date} onChange={(e) => setDate(e.target.value)} className="w-full px-5 py-4 rounded-xl bg-white/10 border border-white/20 text-white focus:ring-2 focus:ring-salute-secondary focus:border-transparent outline-none transition-all backdrop-blur-sm" style={{colorScheme: 'dark'}} />
                 </div>
@@ -235,9 +262,9 @@ export default function Contact() {
 
               <div className="space-y-3 mb-6 relative z-10">
                 <label className="text-sm font-bold text-white/80 uppercase tracking-wide">Available Times</label>
-                {!date ? (
+                {(!date || !doctorId) ? (
                   <div className="p-4 rounded-xl border border-dashed border-white/30 text-center text-white/70 text-sm font-medium">
-                    Please select a date first to view available slots.
+                    Please select a doctor and date first to view available slots.
                   </div>
                 ) : isLoadingSlots ? (
                   <div className="p-4 rounded-xl border border-white/20 bg-white/5 text-center text-white/70 text-sm font-medium flex items-center justify-center gap-2">

@@ -49,6 +49,7 @@ export async function POST(req: Request) {
     
     cookieStore.set('admin_session', 'authenticated', cookieOptions);
     cookieStore.set('admin_role', user.role, cookieOptions);
+    cookieStore.set('admin_id', user.id, cookieOptions);
 
     return NextResponse.json({ success: true, message: 'Authenticated successfully.' });
   } catch (error) {

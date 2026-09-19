@@ -10,9 +10,15 @@ const prisma = new PrismaClient();
 export default async function AdminDashboard({ searchParams }: { searchParams: Promise<{ date?: string }> }) {
   const cookieStore = await cookies();
   const role = cookieStore.get('admin_role')?.value || null;
+  const adminId = cookieStore.get('admin_id')?.value || null;
   const params = await searchParams;
 
   const whereClause: any = {};
+  
+  // If the logged-in user is a DOCTOR, only show their appointments
+  if (role === 'DOCTOR' && adminId) {
+    whereClause.doctorId = adminId;
+  }
   
   if (params.date) {
     const startOfDay = new Date(params.date);
