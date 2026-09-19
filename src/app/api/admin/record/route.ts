@@ -3,7 +3,7 @@ import { cookies } from 'next/headers';
 
 export async function GET(request: Request) {
   // 1. Verify Admin Authentication
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const role = cookieStore.get('admin_role')?.value;
   
   if (!role || (role !== 'SUPERADMIN' && role !== 'ADMIN' && role !== 'READER')) {
