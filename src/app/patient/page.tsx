@@ -2,6 +2,7 @@ import { PrismaClient } from '@prisma/client';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
+import DocumentUploadButton from './DocumentUploadButton';
 
 export const dynamic = 'force-dynamic';
 const prisma = new PrismaClient();
@@ -122,19 +123,7 @@ export default async function PatientDashboard() {
                     </div>
                     
                     <div className="flex-shrink-0 md:text-right">
-                      {apt.documentUrl && (
-                        <a 
-                          href={apt.documentUrl} 
-                          target="_blank" 
-                          rel="noreferrer"
-                          className="inline-flex items-center gap-2 text-salute-primary hover:text-salute-dark font-bold text-sm bg-salute-primary/10 px-4 py-2 rounded-lg transition-colors"
-                        >
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path>
-                          </svg>
-                          View Records
-                        </a>
-                      )}
+                      <DocumentUploadButton appointmentId={apt.id} />
                     </div>
                   </div>
                 ))}
