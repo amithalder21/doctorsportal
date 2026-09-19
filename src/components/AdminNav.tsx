@@ -47,7 +47,11 @@ export default function AdminNav({ role, name }: { role: string | null, name?: s
           </div>
           
           <div className="flex items-center gap-4">
-            {name && <span className="text-sm font-bold hidden sm:inline-block">Welcome, {name.split(' ')[0]}</span>}
+            {name && (
+              <span className="text-sm font-bold hidden sm:inline-block">
+                Welcome, {name.startsWith('Dr.') ? name : name.split(' ')[0]}
+              </span>
+            )}
             <span className="bg-white/20 px-3 py-1 rounded-full text-xs font-bold tracking-wider uppercase">
               {role || 'Unknown'}
             </span>
