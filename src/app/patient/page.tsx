@@ -159,7 +159,7 @@ export default async function PatientDashboard() {
                       </p>
                       
                       <p className="text-gray-600">
-                        <strong>Doctor:</strong> Dr. {apt.doctor?.name || 'Unassigned'}
+                        <strong>Doctor:</strong> {apt.doctor?.name?.startsWith('Dr.') ? apt.doctor.name : `Dr. ${apt.doctor?.name || 'Unassigned'}`}
                       </p>
                       
                       {apt.message && (
