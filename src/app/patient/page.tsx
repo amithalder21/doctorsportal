@@ -3,6 +3,7 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import DocumentUploadButton from './DocumentUploadButton';
+import PatientCancelButton from './PatientCancelButton';
 import LogoutButton from '@/components/LogoutButton';
 
 export const dynamic = 'force-dynamic';
@@ -169,8 +170,9 @@ export default async function PatientDashboard() {
                       )}
                     </div>
                     
-                    <div className="flex-shrink-0 md:text-right">
+                    <div className="flex-shrink-0 md:text-right flex flex-col items-end gap-2">
                       <DocumentUploadButton appointmentId={apt.id} />
+                      <PatientCancelButton appointmentId={apt.id} status={apt.status} />
                     </div>
                   </div>
                 ))}

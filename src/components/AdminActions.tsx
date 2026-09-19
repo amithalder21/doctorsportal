@@ -15,10 +15,13 @@ export default function AdminActions({ id, initialStatus, userRole }: AdminActio
   const [isUpdating, setIsUpdating] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  // SUPERADMIN and DOCTOR have full rights
-  // RECEPTION can edit status but not delete
-  const canEdit = ['SUPERADMIN', 'DOCTOR', 'RECEPTION'].includes(userRole || '');
-  const canDelete = ['SUPERADMIN', 'DOCTOR'].includes(userRole || '');
+  const isTerminalState = initialStatus === 'COMPLETED' || initialStatus === 'CANCELLED';
+  
+  // SUPERADMIN has full rights. DOCTOR and RECEPTION can only edit non-terminal states
+  const canEdit = userRole === 'SUPERADMIN' || (['DOCTOR', 'RECEPTION'].includes(userRole || '') && !isTerminalState);
+  
+  // Only SUPERADMIN can permanently delete records
+  const canDelete = userRole === 'SUPERADMIN';
 
   const handleStatusChange = async (newStatus: string) => {
     if (!canEdit) return;
