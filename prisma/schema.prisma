@@ -13,6 +13,7 @@ model Appointment {
   phone     String
   email     String
   date      DateTime
+  time      String
   message   String?
   createdAt DateTime @default(now())
 }

@@ -15,7 +15,7 @@ export default function Hero() {
             <span className="text-salute-primary">Women & Children</span>
           </h1>
           <p className="text-lg md:text-xl text-gray-600 max-w-lg leading-relaxed">
-            Providing compassionate, state-of-the-art healthcare tailored to your unique needs. Experience the highest standard of medical excellence with Dr. Swati Sinha.
+            Providing compassionate, state-of-the-art healthcare tailored to your unique needs. Experience the highest standard of medical excellence with Dr. Ankit Gaur.
           </p>
           <div className="pt-6 flex flex-wrap gap-4">
             <a href="#contact" className="inline-block px-8 py-4 bg-salute-secondary hover:bg-[#ff7575] text-white rounded font-bold transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 text-sm uppercase tracking-wide text-center">

@@ -4,6 +4,14 @@ import { useState } from 'react';
 
 export default function Contact() {
   const [date, setDate] = useState('');
+  const [timeSlot, setTimeSlot] = useState('');
+  const [formData, setFormData] = useState({
+    name: '',
+    phone: '',
+    email: '',
+    message: ''
+  });
+  const [status, setStatus] = useState<{ type: 'idle' | 'loading' | 'success' | 'error', message?: string }>({ type: 'idle' });
   
   const timeSlots = [
     "09:00 AM", "09:30 AM", "10:00 AM", "10:30 AM",
@@ -12,9 +20,39 @@ export default function Contact() {
     "04:00 PM", "04:30 PM", "05:00 PM", "05:30 PM"
   ];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    alert("Appointment request submitted successfully!");
+    if (!timeSlot) {
+      setStatus({ type: 'error', message: 'Please select an available time.' });
+      return;
+    }
+    
+    setStatus({ type: 'loading' });
+    
+    try {
+      const res = await fetch('/api/appointments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...formData, date, time: timeSlot }),
+      });
+      
+      const data = await res.json();
+      
+      if (!res.ok) {
+        throw new Error(data.error || 'Something went wrong');
+      }
+      
+      setStatus({ type: 'success', message: 'Appointment request submitted successfully! We will contact you soon.' });
+      setFormData({ name: '', phone: '', email: '', message: '' });
+      setDate('');
+      setTimeSlot('');
+    } catch (err: any) {
+      setStatus({ type: 'error', message: err.message });
+    }
   };
 
   return (
@@ -68,21 +106,32 @@ export default function Contact() {
               
               <h3 className="text-3xl font-bold text-white mb-8 font-heading relative z-10">Book an Appointment</h3>
               
+              {status.type === 'success' && (
+                <div className="mb-6 p-4 rounded-xl bg-green-500/20 border border-green-500/50 text-green-100 relative z-10">
+                  {status.message}
+                </div>
+              )}
+              {status.type === 'error' && (
+                <div className="mb-6 p-4 rounded-xl bg-red-500/20 border border-red-500/50 text-red-100 relative z-10">
+                  {status.message}
+                </div>
+              )}
+
               <div className="grid md:grid-cols-2 gap-6 mb-6 relative z-10">
                 <div className="space-y-2">
                   <label className="text-sm font-bold text-white/80 uppercase tracking-wide">Full Name</label>
-                  <input required type="text" className="w-full px-5 py-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:ring-2 focus:ring-salute-secondary focus:border-transparent outline-none transition-all backdrop-blur-sm" placeholder="Jane Doe" />
+                  <input required type="text" name="name" value={formData.name} onChange={handleInputChange} className="w-full px-5 py-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:ring-2 focus:ring-salute-secondary focus:border-transparent outline-none transition-all backdrop-blur-sm" placeholder="Jane Doe" />
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-bold text-white/80 uppercase tracking-wide">Phone Number</label>
-                  <input required type="tel" className="w-full px-5 py-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:ring-2 focus:ring-salute-secondary focus:border-transparent outline-none transition-all backdrop-blur-sm" placeholder="+91 00000 00000" />
+                  <input required type="tel" name="phone" value={formData.phone} onChange={handleInputChange} className="w-full px-5 py-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:ring-2 focus:ring-salute-secondary focus:border-transparent outline-none transition-all backdrop-blur-sm" placeholder="+91 00000 00000" />
                 </div>
               </div>
               
               <div className="grid md:grid-cols-2 gap-6 mb-6 relative z-10">
                 <div className="space-y-2">
                   <label className="text-sm font-bold text-white/80 uppercase tracking-wide">Email Address</label>
-                  <input required type="email" className="w-full px-5 py-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:ring-2 focus:ring-salute-secondary focus:border-transparent outline-none transition-all backdrop-blur-sm" placeholder="jane@example.com" />
+                  <input required type="email" name="email" value={formData.email} onChange={handleInputChange} className="w-full px-5 py-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:ring-2 focus:ring-salute-secondary focus:border-transparent outline-none transition-all backdrop-blur-sm" placeholder="jane@example.com" />
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-bold text-white/80 uppercase tracking-wide">Preferred Date</label>
@@ -95,7 +144,7 @@ export default function Contact() {
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                   {timeSlots.map((time) => (
                     <label key={time} className="cursor-pointer">
-                      <input type="radio" name="timeSlot" value={time} className="peer sr-only" required />
+                      <input type="radio" name="timeSlot" value={time} checked={timeSlot === time} onChange={() => setTimeSlot(time)} className="peer sr-only" required />
                       <div className="text-center px-2 py-3 rounded-xl border border-white/20 text-white/80 peer-checked:bg-salute-secondary peer-checked:text-white peer-checked:border-salute-secondary hover:bg-white/10 transition-all text-sm font-bold">
                         {time}
                       </div>
@@ -106,11 +155,11 @@ export default function Contact() {
               
               <div className="space-y-2 mb-10 relative z-10">
                 <label className="text-sm font-bold text-white/80 uppercase tracking-wide">Message (Optional)</label>
-                <textarea rows={4} className="w-full px-5 py-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:ring-2 focus:ring-salute-secondary focus:border-transparent outline-none transition-all resize-none backdrop-blur-sm" placeholder="How can we help you?"></textarea>
+                <textarea rows={4} name="message" value={formData.message} onChange={handleInputChange} className="w-full px-5 py-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:ring-2 focus:ring-salute-secondary focus:border-transparent outline-none transition-all resize-none backdrop-blur-sm" placeholder="How can we help you?"></textarea>
               </div>
               
-              <button type="submit" className="w-full py-5 bg-salute-secondary hover:bg-[#ff7575] text-white rounded-xl font-bold transition-all shadow-[0_10px_20px_-10px_rgba(255,141,141,0.5)] hover:-translate-y-1 relative z-10 text-sm uppercase tracking-wider">
-                Submit Request
+              <button disabled={status.type === 'loading'} type="submit" className="w-full py-5 bg-salute-secondary hover:bg-[#ff7575] disabled:bg-[#ff7575]/50 disabled:cursor-not-allowed text-white rounded-xl font-bold transition-all shadow-[0_10px_20px_-10px_rgba(255,141,141,0.5)] hover:-translate-y-1 relative z-10 text-sm uppercase tracking-wider">
+                {status.type === 'loading' ? 'Submitting...' : 'Submit Request'}
               </button>
             </form>
           </div>

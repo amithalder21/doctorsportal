@@ -5,7 +5,7 @@ export default function Header() {
     <header className="fixed w-full top-0 z-50 bg-white/90 backdrop-blur-md shadow-sm">
       <div className="container mx-auto px-6 py-4 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-3">
-          <h1 className="text-2xl font-bold text-salute-primary font-heading">Dr. Swati Sinha</h1>
+          <h1 className="text-2xl font-bold text-salute-primary font-heading">Dr. Ankit Gaur</h1>
         </Link>
         
         <nav className="hidden md:flex items-center gap-8">

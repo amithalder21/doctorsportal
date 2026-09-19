@@ -13,7 +13,7 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Dr. Swati Sinha - Obstetrician and Gynaecologist",
+  title: "Dr. Ankit Gaur",
   description: "Expert Care for Women & Children. Providing compassionate, state-of-the-art healthcare tailored to your unique needs.",
 };
 

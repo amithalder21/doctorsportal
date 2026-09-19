@@ -4,7 +4,7 @@ export default function Footer() {
       <div className="container mx-auto px-6 grid md:grid-cols-4 gap-12">
         <div className="md:col-span-2">
           <div className="flex items-center gap-3 mb-6">
-            <h3 className="text-2xl font-bold text-white font-heading">Dr. Swati Sinha</h3>
+            <h3 className="text-2xl font-bold text-white font-heading">Dr. Ankit Gaur</h3>
           </div>
           <p className="text-white/70 max-w-sm leading-relaxed mb-8">
             Providing expert, compassionate care for women and children in a state-of-the-art facility. Your health and well-being are our top priorities.
@@ -43,7 +43,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="container mx-auto px-6 mt-16 pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between text-white/50 text-sm">
-        <p>&copy; {new Date().getFullYear()} Dr. Swati Sinha. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} Dr. Ankit Gaur. All rights reserved.</p>
         <div className="flex gap-4 mt-4 md:mt-0">
           <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
           <a href="#" className="hover:text-white transition-colors">Terms of Service</a>

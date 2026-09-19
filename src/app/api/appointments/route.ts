@@ -1,0 +1,86 @@
+import { NextResponse } from 'next/server';
+import { PrismaClient } from '@prisma/client';
+import { Redis } from '@upstash/redis';
+import { Ratelimit } from '@upstash/ratelimit';
+
+// Initialize Prisma
+const prisma = new PrismaClient();
+
+// Initialize Redis from the REDIS_URL provided by Upstash
+// We construct the REST URL based on the standard Upstash URI format
+const rawRedisUrl = process.env.REDIS_URL || '';
+const redisUrlMatch = rawRedisUrl.match(/redis:\/\/[^:]+:([^@]+)@([^:]+):/);
+const redisToken = redisUrlMatch ? redisUrlMatch[1] : '';
+const redisHost = redisUrlMatch ? redisUrlMatch[2] : '';
+const redisRestUrl = redisHost ? `https://${redisHost.replace('db.redis.io', 'upstash.io')}` : '';
+
+const redis = new Redis({
+  url: redisRestUrl || 'https://upstash.io',
+  token: redisToken || 'dummy_token',
+});
+
+// Create a new ratelimiter, that allows 3 requests per 1 hour
+const ratelimit = new Ratelimit({
+  redis: redis,
+  limiter: Ratelimit.slidingWindow(3, "1 h"),
+});
+
+export async function POST(req: Request) {
+  try {
+    // 1. Rate Limiting
+    // Get IP address from headers, fallback to a default string if missing
+    const ip = req.headers.get('x-forwarded-for') ?? 'anonymous';
+    const { success, limit, reset, remaining } = await ratelimit.limit(
+      `ratelimit_appointment_${ip}`
+    );
+
+    if (!success) {
+      return NextResponse.json(
+        { error: 'Too many requests. Please try again later.' },
+        {
+          status: 429,
+          headers: {
+            'X-RateLimit-Limit': limit.toString(),
+            'X-RateLimit-Remaining': remaining.toString(),
+            'X-RateLimit-Reset': reset.toString(),
+          },
+        }
+      );
+    }
+
+    // 2. Parse and Validate Request Body
+    const body = await req.json();
+    const { name, phone, email, date, time, message } = body;
+
+    if (!name || !phone || !email || !date || !time) {
+      return NextResponse.json(
+        { error: 'Missing required fields.' },
+        { status: 400 }
+      );
+    }
+
+    // 3. Save to PostgreSQL Database using Prisma
+    const appointment = await prisma.appointment.create({
+      data: {
+        name,
+        phone,
+        email,
+        date: new Date(date),
+        time,
+        message: message || null,
+      },
+    });
+
+    // 4. Return Success Response
+    return NextResponse.json(
+      { success: true, data: appointment },
+      { status: 201 }
+    );
+  } catch (error) {
+    console.error('API Error:', error);
+    return NextResponse.json(
+      { error: 'Internal Server Error' },
+      { status: 500 }
+    );
+  }
+}
