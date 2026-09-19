@@ -226,7 +226,9 @@ export default function ScheduleManager({ role, adminId }: { role: string | null
                       {(role === 'SUPERADMIN' || role === 'RECEPTION') && (
                         <td className="p-4">
                           <span className="text-sm font-medium text-gray-700">
-                            Dr. {block.doctor?.name || block.doctor?.email?.split('@')[0]}
+                            {block.doctor?.name?.startsWith('Dr.') 
+                              ? block.doctor.name 
+                              : `Dr. ${block.doctor?.name || block.doctor?.email?.split('@')[0]}`}
                           </span>
                         </td>
                       )}
