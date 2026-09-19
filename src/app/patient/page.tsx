@@ -22,6 +22,9 @@ export default async function PatientDashboard() {
       appointments: {
         orderBy: {
           date: 'desc'
+        },
+        include: {
+          doctor: true
         }
       }
     }
@@ -153,6 +156,10 @@ export default async function PatientDashboard() {
                       
                       <p className="text-gray-600">
                         <strong>Patient Name:</strong> {apt.name}
+                      </p>
+                      
+                      <p className="text-gray-600">
+                        <strong>Doctor:</strong> Dr. {apt.doctor?.name || 'Unassigned'}
                       </p>
                       
                       {apt.message && (
