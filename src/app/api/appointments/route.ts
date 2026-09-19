@@ -6,18 +6,7 @@ import { Ratelimit } from '@upstash/ratelimit';
 // Initialize Prisma
 const prisma = new PrismaClient();
 
-// Initialize Redis from the REDIS_URL provided by Upstash
-// We construct the REST URL based on the standard Upstash URI format
-const rawRedisUrl = process.env.REDIS_URL || '';
-const redisUrlMatch = rawRedisUrl.match(/redis:\/\/[^:]+:([^@]+)@([^:]+):/);
-const redisToken = redisUrlMatch ? redisUrlMatch[1] : '';
-const redisHost = redisUrlMatch ? redisUrlMatch[2] : '';
-const redisRestUrl = redisHost ? `https://${redisHost.replace('db.redis.io', 'upstash.io')}` : '';
-
-const redis = new Redis({
-  url: redisRestUrl || 'https://upstash.io',
-  token: redisToken || 'dummy_token',
-});
+const redis = Redis.fromEnv();
 
 // Create a new ratelimiter, that allows 3 requests per 1 hour
 const ratelimit = new Ratelimit({

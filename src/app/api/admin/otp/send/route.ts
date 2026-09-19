@@ -5,17 +5,7 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-// Initialize Redis from the REDIS_URL provided by Upstash
-const rawRedisUrl = process.env.REDIS_URL || '';
-const redisUrlMatch = rawRedisUrl.match(/redis:\/\/[^:]+:([^@]+)@([^:]+):/);
-const redisToken = redisUrlMatch ? redisUrlMatch[1] : '';
-const redisHost = redisUrlMatch ? redisUrlMatch[2] : '';
-const redisRestUrl = redisHost ? `https://${redisHost.replace('db.redis.io', 'upstash.io')}` : '';
-
-const redis = new Redis({
-  url: redisRestUrl || 'https://upstash.io',
-  token: redisToken || 'dummy_token',
-});
+const redis = Redis.fromEnv();
 
 export async function POST(req: Request) {
   try {
