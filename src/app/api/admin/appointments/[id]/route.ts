@@ -29,15 +29,36 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
 
   try {
     const { id } = await params;
-    const { status } = await request.json();
+    const { status, paymentStatus, transactionId } = await request.json();
     
-    if (!['PENDING', 'CONFIRMED', 'COMPLETED', 'CANCELLED'].includes(status)) {
-      return new NextResponse('Invalid status', { status: 400 });
+    // We can update either status, or payment info, or both
+    const updateData: any = {};
+    
+    if (status) {
+      if (!['PENDING', 'CONFIRMED', 'COMPLETED', 'CANCELLED'].includes(status)) {
+        return new NextResponse('Invalid status', { status: 400 });
+      }
+      updateData.status = status;
+    }
+
+    if (paymentStatus) {
+      if (!['UNPAID', 'PAID'].includes(paymentStatus)) {
+        return new NextResponse('Invalid payment status', { status: 400 });
+      }
+      updateData.paymentStatus = paymentStatus;
+    }
+    
+    if (transactionId !== undefined) {
+      updateData.transactionId = transactionId;
+    }
+
+    if (Object.keys(updateData).length === 0) {
+       return new NextResponse('No fields to update', { status: 400 });
     }
 
     const updated = await prisma.appointment.update({
       where: { id },
-      data: { status }
+      data: updateData
     });
 
     // Send email notification based on status

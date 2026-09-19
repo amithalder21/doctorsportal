@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { cookies } from 'next/headers';
 import AdminActions from '@/components/AdminActions';
+import AdminPayment from '@/components/AdminPayment';
 import AdminDateFilter from './AdminDateFilter';
 
 export const dynamic = 'force-dynamic';
@@ -65,13 +66,14 @@ export default async function AdminDashboard({ searchParams }: { searchParams: P
                   <th className="p-5 text-sm font-bold text-gray-600 uppercase tracking-wider">Contact Details</th>
                   <th className="p-5 text-sm font-bold text-gray-600 uppercase tracking-wider">Requested Slot</th>
                   <th className="p-5 text-sm font-bold text-gray-600 uppercase tracking-wider">Message & Records</th>
+                  <th className="p-5 text-sm font-bold text-gray-600 uppercase tracking-wider">Payment</th>
                   <th className="p-5 text-sm font-bold text-gray-600 uppercase tracking-wider">Status & Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {appointments.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="p-10 text-center text-gray-400">
+                    <td colSpan={6} className="p-10 text-center text-gray-400">
                       No appointments found.
                     </td>
                   </tr>
@@ -121,6 +123,14 @@ export default async function AdminDashboard({ searchParams }: { searchParams: P
                             )}
                           </>
                         )}
+                      </td>
+                      <td className="p-5">
+                        <AdminPayment 
+                          id={apt.id} 
+                          initialPaymentStatus={apt.paymentStatus} 
+                          initialTransactionId={apt.transactionId} 
+                          userRole={role} 
+                        />
                       </td>
                       <td className="p-5">
                         <AdminActions 

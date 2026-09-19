@@ -142,6 +142,13 @@ export default async function PatientDashboard() {
                         <span className={`px-3 py-1 rounded-full text-xs font-bold ${getStatusColor(apt.status)}`}>
                           {apt.status}
                         </span>
+                        <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                          apt.paymentStatus === 'PAID' 
+                            ? 'bg-green-50 text-green-700 border border-green-200' 
+                            : 'bg-red-50 text-red-700 border border-red-200'
+                        }`}>
+                          {apt.paymentStatus}
+                        </span>
                       </div>
                       
                       <p className="text-gray-600">

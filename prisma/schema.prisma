@@ -14,23 +14,30 @@ enum AppointmentStatus {
   CANCELLED
 }
 
+enum PaymentStatus {
+  UNPAID
+  PAID
+}
+
 model Appointment {
-  id          String            @id @default(cuid())
-  name        String
-  phone       String
-  email       String
-  date        DateTime
-  time        String
-  message     String?
-  documentUrl String?
-  status      AppointmentStatus @default(PENDING)
-  createdAt   DateTime          @default(now())
+  id            String            @id @default(cuid())
+  name          String
+  phone         String
+  email         String
+  date          DateTime
+  time          String
+  message       String?
+  documentUrl   String?
+  status        AppointmentStatus @default(PENDING)
+  paymentStatus PaymentStatus     @default(UNPAID)
+  transactionId String?
+  createdAt     DateTime          @default(now())
   
   // Relations
-  userId      String?
-  user        User?             @relation("PatientAppointments", fields: [userId], references: [id])
-  doctorId    String?
-  doctor      User?             @relation("DoctorAppointments", fields: [doctorId], references: [id])
+  userId        String?
+  user          User?             @relation("PatientAppointments", fields: [userId], references: [id])
+  doctorId      String?
+  doctor        User?             @relation("DoctorAppointments", fields: [doctorId], references: [id])
 }
 
 enum Role {
