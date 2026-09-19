@@ -10,6 +10,7 @@ export default function Contact() {
   const [doctorId, setDoctorId] = useState('');
   const [doctors, setDoctors] = useState<{id: string, name: string | null, email: string}[]>([]);
   const [bookedSlots, setBookedSlots] = useState<string[]>([]);
+  const [isHoliday, setIsHoliday] = useState(false);
   const [isLoadingSlots, setIsLoadingSlots] = useState(false);
   const [formData, setFormData] = useState({
     firstName: '',
@@ -45,6 +46,7 @@ export default function Contact() {
   useEffect(() => {
     if (!date || !doctorId) {
       setBookedSlots([]);
+      setIsHoliday(false);
       return;
     }
 
@@ -55,8 +57,9 @@ export default function Contact() {
         const data = await res.json();
         if (res.ok) {
           setBookedSlots(data.bookedSlots || []);
-          // If the currently selected time slot is now booked, unselect it
-          if (timeSlot && data.bookedSlots?.includes(timeSlot)) {
+          setIsHoliday(data.isHoliday || false);
+          // If the currently selected time slot is now booked or it's a holiday, unselect it
+          if (timeSlot && (data.isHoliday || data.bookedSlots?.includes(timeSlot))) {
             setTimeSlot('');
           }
         }
@@ -281,6 +284,12 @@ export default function Contact() {
                     <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                     Checking availability...
                   </div>
+                ) : isHoliday ? (
+                  <div className="p-6 rounded-xl border border-red-500/30 bg-red-500/10 text-center flex flex-col items-center justify-center gap-2">
+                    <svg className="w-8 h-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <p className="text-red-200 font-bold">Doctor is unavailable on this date.</p>
+                    <p className="text-red-200/70 text-sm">Please select a different date for your appointment.</p>
+                  </div>
                 ) : (
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                     {timeSlots.map((time) => {
@@ -331,7 +340,7 @@ export default function Contact() {
                 <textarea rows={4} name="message" value={formData.message} onChange={handleInputChange} className="w-full px-5 py-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:ring-2 focus:ring-salute-secondary focus:border-transparent outline-none transition-all resize-none backdrop-blur-sm" placeholder="How can we help you?"></textarea>
               </div>
               
-              <button disabled={status.type === 'loading'} type="submit" className="w-full py-5 bg-salute-secondary hover:bg-[#ff7575] disabled:bg-[#ff7575]/50 disabled:cursor-not-allowed text-white rounded-xl font-bold transition-all shadow-[0_10px_20px_-10px_rgba(255,141,141,0.5)] hover:shadow-[0_15px_25px_-10px_rgba(255,141,141,0.6)] hover:-translate-y-1 relative z-10 text-sm uppercase tracking-wider">
+              <button disabled={status.type === 'loading' || isHoliday} type="submit" className="w-full py-5 bg-salute-secondary hover:bg-[#ff7575] disabled:bg-[#ff7575]/50 disabled:cursor-not-allowed text-white rounded-xl font-bold transition-all shadow-[0_10px_20px_-10px_rgba(255,141,141,0.5)] hover:shadow-[0_15px_25px_-10px_rgba(255,141,141,0.6)] hover:-translate-y-1 relative z-10 text-sm uppercase tracking-wider">
                 {status.type === 'loading' ? 'Confirming...' : 'Confirm Appointment'}
               </button>
             </form>

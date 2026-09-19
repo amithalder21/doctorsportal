@@ -87,6 +87,27 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'This time slot is already booked. Please choose another time.' }, { status: 409 });
     }
 
+    // 3.5 Check if doctor is on holiday / blocked
+    if (doctorId) {
+      const blockedSlot = await prisma.blockedSlot.findFirst({
+        where: {
+          doctorId: doctorId,
+          date: {
+            gte: startOfDay,
+            lte: endOfDay,
+          },
+          OR: [
+            { time: null }, // Entire day blocked
+            { time: time }  // Specific time blocked
+          ]
+        }
+      });
+
+      if (blockedSlot) {
+        return NextResponse.json({ error: 'The selected doctor is not available at this date and time.' }, { status: 409 });
+      }
+    }
+
     // 4. Auto-Create Patient Profile or Link Existing
     let user = await prisma.user.findUnique({
       where: { email }

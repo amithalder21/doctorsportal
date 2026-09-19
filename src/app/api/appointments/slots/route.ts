@@ -38,10 +38,32 @@ export async function GET(request: NextRequest) {
       }
     });
 
-    // Extract just the time strings
+    // Fetch BlockedSlots for this doctor on this date
+    const blockedSlotsRecords = await prisma.blockedSlot.findMany({
+      where: {
+        doctorId: doctorIdParam,
+        date: {
+          gte: startOfDay,
+          lte: endOfDay,
+        }
+      }
+    });
+
+    // Check if the entire day is blocked (time is null)
+    const isFullDayBlocked = blockedSlotsRecords.some(slot => slot.time === null);
+
+    if (isFullDayBlocked) {
+      return NextResponse.json({ bookedSlots: [], isHoliday: true });
+    }
+
+    // Extract just the time strings for booked appointments
     const bookedSlots = appointments.map(apt => apt.time);
 
-    return NextResponse.json({ bookedSlots });
+    // Merge specific blocked time slots
+    const specificBlockedTimes = blockedSlotsRecords.filter(slot => slot.time !== null).map(slot => slot.time as string);
+    const allUnavailableSlots = Array.from(new Set([...bookedSlots, ...specificBlockedTimes]));
+
+    return NextResponse.json({ bookedSlots: allUnavailableSlots, isHoliday: false });
   } catch (error) {
     console.error('Error fetching booked slots:', error);
     return new NextResponse('Internal Server Error', { status: 500 });
