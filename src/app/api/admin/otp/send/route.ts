@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import { Redis } from '@upstash/redis';
 import { Resend } from 'resend';
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
 
 // Initialize Redis from the REDIS_URL provided by Upstash
 const rawRedisUrl = process.env.REDIS_URL || '';
@@ -24,10 +27,13 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Email is required.' }, { status: 400 });
     }
 
-    const adminEmail = process.env.ADMIN_EMAIL;
+    // Query the database for the user
+    const user = await prisma.user.findUnique({ 
+      where: { email: email.toLowerCase() } 
+    });
 
-    if (!adminEmail || email.toLowerCase() !== adminEmail.toLowerCase()) {
-      return NextResponse.json({ error: 'Unauthorized admin email address.' }, { status: 403 });
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized email address. Not found in database.' }, { status: 403 });
     }
 
     // Generate a 6-digit OTP
@@ -39,7 +45,7 @@ export async function POST(req: Request) {
     // Send the email via Resend
     const { data, error } = await resend.emails.send({
       from: 'Doctor Portal <onboarding@resend.dev>',
-      to: adminEmail,
+      to: user.email,
       subject: 'Your Admin Login OTP',
       html: `<p>Your one-time password to log into the Admin Dashboard is: <strong>${otp}</strong></p><p>This code will expire in 5 minutes.</p>`,
     });

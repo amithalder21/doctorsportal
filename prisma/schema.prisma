@@ -17,3 +17,16 @@ model Appointment {
   message   String?
   createdAt DateTime @default(now())
 }
+
+enum Role {
+  SUPERADMIN
+  ADMIN
+  READER
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  role      Role     @default(READER)
+  createdAt DateTime @default(now())
+}

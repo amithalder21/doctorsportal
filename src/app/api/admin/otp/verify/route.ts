@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import { Redis } from '@upstash/redis';
 import { cookies } from 'next/headers';
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
 
 // Initialize Redis from the REDIS_URL provided by Upstash
 const rawRedisUrl = process.env.REDIS_URL || '';
@@ -22,9 +25,11 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Email and OTP are required.' }, { status: 400 });
     }
 
-    const adminEmail = process.env.ADMIN_EMAIL;
+    const user = await prisma.user.findUnique({
+      where: { email: email.toLowerCase() }
+    });
 
-    if (!adminEmail || email.toLowerCase() !== adminEmail.toLowerCase()) {
+    if (!user) {
       return NextResponse.json({ error: 'Invalid email or OTP.' }, { status: 400 });
     }
 
@@ -40,13 +45,16 @@ export async function POST(req: Request) {
 
     // Set secure HTTP-only cookie using next/headers
     const cookieStore = await cookies();
-    cookieStore.set('admin_session', 'authenticated', {
+    const cookieOptions = {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
+      sameSite: 'strict' as const,
       maxAge: 60 * 60 * 24, // 1 day
       path: '/',
-    });
+    };
+    
+    cookieStore.set('admin_session', 'authenticated', cookieOptions);
+    cookieStore.set('admin_role', user.role, cookieOptions);
 
     return NextResponse.json({ success: true, message: 'Authenticated successfully.' });
   } catch (error) {
