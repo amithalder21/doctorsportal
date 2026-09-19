@@ -254,6 +254,10 @@ export default function Contact() {
               
               <div className="grid md:grid-cols-2 gap-6 mb-6 relative z-10">
                 <div className="space-y-2">
+                  <label className="text-sm font-bold text-white/80 uppercase tracking-wide">Preferred Date</label>
+                  <input required type="date" value={date} onChange={(e) => setDate(e.target.value)} className="w-full px-5 py-4 rounded-xl bg-white/10 border border-white/20 text-white focus:ring-2 focus:ring-salute-secondary focus:border-transparent outline-none transition-all backdrop-blur-sm" style={{colorScheme: 'dark'}} />
+                </div>
+                <div className="space-y-2">
                   <label className="text-sm font-bold text-white/80 uppercase tracking-wide">Select Doctor</label>
                   <select required value={doctorId} onChange={(e) => setDoctorId(e.target.value)} className="w-full px-5 py-4 rounded-xl bg-white/10 border border-white/20 text-white focus:ring-2 focus:ring-salute-secondary focus:border-transparent outline-none transition-all backdrop-blur-sm [&>option]:text-salute-dark">
                     <option value="" disabled>Choose a Doctor</option>
@@ -263,10 +267,6 @@ export default function Contact() {
                       </option>
                     ))}
                   </select>
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-bold text-white/80 uppercase tracking-wide">Preferred Date</label>
-                  <input required type="date" value={date} onChange={(e) => setDate(e.target.value)} className="w-full px-5 py-4 rounded-xl bg-white/10 border border-white/20 text-white focus:ring-2 focus:ring-salute-secondary focus:border-transparent outline-none transition-all backdrop-blur-sm" style={{colorScheme: 'dark'}} />
                 </div>
               </div>
 
