@@ -5,76 +5,79 @@ export default function Contact() {
         <div className="flex flex-col lg:flex-row gap-16">
           <div className="w-full lg:w-1/3 space-y-8">
             <div>
-              <h4 className="text-purple-600 font-semibold tracking-wider uppercase text-sm">Contact Us</h4>
-              <h2 className="text-4xl font-bold text-gray-900 mt-2 mb-4">Get In Touch</h2>
-              <p className="text-gray-600">We are here to answer any questions you may have and help you schedule your appointment.</p>
+              <h4 className="text-salute-secondary font-bold tracking-wider uppercase text-sm mb-3">Contact Us</h4>
+              <h2 className="text-4xl md:text-5xl font-bold text-salute-dark mt-2 mb-6 font-heading">Get In Touch</h2>
+              <p className="text-gray-600 text-lg">We are here to answer any questions you may have and help you schedule your appointment.</p>
             </div>
             
-            <div className="space-y-6">
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-purple-50 rounded-full flex items-center justify-center text-purple-600 flex-shrink-0">
-                  📍
+            <div className="space-y-8 pt-4">
+              <div className="flex items-start gap-6">
+                <div className="w-14 h-14 bg-salute-light rounded-tl-xl rounded-br-xl flex items-center justify-center text-salute-primary flex-shrink-0 shadow-sm">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                 </div>
                 <div>
-                  <h5 className="font-semibold text-gray-900 text-lg">Location</h5>
-                  <p className="text-gray-600 mt-1">123 Healthcare Ave, Medical District<br/>New Delhi, India 110001</p>
+                  <h5 className="font-bold text-salute-dark text-xl font-heading mb-1">Location</h5>
+                  <p className="text-gray-600 leading-relaxed">123 Healthcare Ave, Medical District<br/>New Delhi, India 110001</p>
                 </div>
               </div>
               
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-purple-50 rounded-full flex items-center justify-center text-purple-600 flex-shrink-0">
-                  📞
+              <div className="flex items-start gap-6">
+                <div className="w-14 h-14 bg-salute-light rounded-tl-xl rounded-br-xl flex items-center justify-center text-salute-primary flex-shrink-0 shadow-sm">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
                 </div>
                 <div>
-                  <h5 className="font-semibold text-gray-900 text-lg">Phone</h5>
-                  <p className="text-gray-600 mt-1">+91 98765 43210</p>
+                  <h5 className="font-bold text-salute-dark text-xl font-heading mb-1">Phone</h5>
+                  <p className="text-gray-600 leading-relaxed">+91 98765 43210</p>
                 </div>
               </div>
               
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-purple-50 rounded-full flex items-center justify-center text-purple-600 flex-shrink-0">
-                  🕒
+              <div className="flex items-start gap-6">
+                <div className="w-14 h-14 bg-salute-light rounded-tl-xl rounded-br-xl flex items-center justify-center text-salute-primary flex-shrink-0 shadow-sm">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                 </div>
                 <div>
-                  <h5 className="font-semibold text-gray-900 text-lg">Hours</h5>
-                  <p className="text-gray-600 mt-1">Mon-Sat: 9:00 AM - 6:00 PM<br/>Sunday: Closed</p>
+                  <h5 className="font-bold text-salute-dark text-xl font-heading mb-1">Hours</h5>
+                  <p className="text-gray-600 leading-relaxed">Mon-Sat: 9:00 AM - 6:00 PM<br/>Sunday: Closed</p>
                 </div>
               </div>
             </div>
           </div>
           
           <div className="w-full lg:w-2/3">
-            <form className="bg-gray-50 p-8 md:p-12 rounded-3xl shadow-sm border border-gray-100">
-              <h3 className="text-2xl font-bold text-gray-900 mb-8">Book an Appointment</h3>
+            <form className="bg-salute-primary p-10 md:p-14 rounded-[40px] shadow-2xl relative overflow-hidden">
+              {/* Decorative circle in form */}
+              <div className="absolute -top-24 -right-24 w-64 h-64 bg-salute-accent rounded-full opacity-10"></div>
               
-              <div className="grid md:grid-cols-2 gap-6 mb-6">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">Full Name</label>
-                  <input type="text" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all" placeholder="Jane Doe" />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">Phone Number</label>
-                  <input type="tel" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all" placeholder="+91 00000 00000" />
-                </div>
-              </div>
+              <h3 className="text-3xl font-bold text-white mb-8 font-heading relative z-10">Book an Appointment</h3>
               
-              <div className="grid md:grid-cols-2 gap-6 mb-6">
+              <div className="grid md:grid-cols-2 gap-6 mb-6 relative z-10">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">Email Address</label>
-                  <input type="email" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all" placeholder="jane@example.com" />
+                  <label className="text-sm font-bold text-white/80 uppercase tracking-wide">Full Name</label>
+                  <input type="text" className="w-full px-5 py-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:ring-2 focus:ring-salute-secondary focus:border-transparent outline-none transition-all backdrop-blur-sm" placeholder="Jane Doe" />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">Preferred Date</label>
-                  <input type="date" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all" />
+                  <label className="text-sm font-bold text-white/80 uppercase tracking-wide">Phone Number</label>
+                  <input type="tel" className="w-full px-5 py-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:ring-2 focus:ring-salute-secondary focus:border-transparent outline-none transition-all backdrop-blur-sm" placeholder="+91 00000 00000" />
                 </div>
               </div>
               
-              <div className="space-y-2 mb-8">
-                <label className="text-sm font-medium text-gray-700">Message (Optional)</label>
-                <textarea rows={4} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all resize-none" placeholder="How can we help you?"></textarea>
+              <div className="grid md:grid-cols-2 gap-6 mb-6 relative z-10">
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-white/80 uppercase tracking-wide">Email Address</label>
+                  <input type="email" className="w-full px-5 py-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:ring-2 focus:ring-salute-secondary focus:border-transparent outline-none transition-all backdrop-blur-sm" placeholder="jane@example.com" />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-white/80 uppercase tracking-wide">Preferred Date</label>
+                  <input type="date" className="w-full px-5 py-4 rounded-xl bg-white/10 border border-white/20 text-white focus:ring-2 focus:ring-salute-secondary focus:border-transparent outline-none transition-all backdrop-blur-sm" style={{colorScheme: 'dark'}} />
+                </div>
               </div>
               
-              <button type="submit" className="w-full py-4 bg-purple-700 hover:bg-purple-800 text-white rounded-xl font-semibold transition-all shadow-md hover:shadow-lg">
+              <div className="space-y-2 mb-10 relative z-10">
+                <label className="text-sm font-bold text-white/80 uppercase tracking-wide">Message (Optional)</label>
+                <textarea rows={4} className="w-full px-5 py-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:ring-2 focus:ring-salute-secondary focus:border-transparent outline-none transition-all resize-none backdrop-blur-sm" placeholder="How can we help you?"></textarea>
+              </div>
+              
+              <button type="submit" className="w-full py-5 bg-salute-secondary hover:bg-[#ff7575] text-white rounded-xl font-bold transition-all shadow-[0_10px_20px_-10px_rgba(255,141,141,0.5)] hover:-translate-y-1 relative z-10 text-sm uppercase tracking-wider">
                 Submit Request
               </button>
             </form>
