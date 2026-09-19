@@ -2,10 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { PrismaClient } from '@prisma/client';
 import { del } from '@vercel/blob';
-import { Resend } from 'resend';
+import { sendEmail } from '@/lib/email';
 
 const prisma = new PrismaClient();
-const resend = new Resend(process.env.RESEND_API_KEY || "re_dummy");
 
 // Reusable function to verify admin access
 async function verifyAdminAccess() {
@@ -52,8 +51,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
         : `<p>Hello ${updated.name},</p><p>Unfortunately, your appointment for <strong>${new Date(updated.date).toLocaleDateString()}</strong> at <strong>${updated.time}</strong> has been cancelled.</p><p>Please contact us if you have any questions.</p>`;
 
       try {
-        await resend.emails.send({
-          from: 'Doctor Portal <onboarding@resend.dev>',
+        await sendEmail({
           to: updated.email,
           subject,
           html: htmlContent,

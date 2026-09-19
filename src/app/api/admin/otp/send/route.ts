@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import Redis from 'ioredis';
-import { Resend } from 'resend';
 import { PrismaClient } from '@prisma/client';
+import { sendEmail } from '@/lib/email';
 
 const prisma = new PrismaClient();
 
@@ -13,8 +13,6 @@ const redis = new Redis(redisUrl || '');
 
 export async function POST(req: Request) {
   try {
-    const resend = new Resend(process.env.RESEND_API_KEY || "re_dummy");
-    
     const { email } = await req.json();
 
     if (!email) {
@@ -40,21 +38,14 @@ export async function POST(req: Request) {
     // Store OTP in Redis with a 5-minute expiration
     await redis.set(`admin_otp_${email.toLowerCase()}`, otp, 'EX', 300);
 
-    // Send the email via Resend
-    const { data, error } = await resend.emails.send({
-      from: 'Doctor Portal <onboarding@resend.dev>',
+    // Send the email via Nodemailer/Brevo
+    await sendEmail({
       to: user.email,
       subject: 'Your Admin Login OTP',
       html: `<p>Your one-time password to log into the Admin Dashboard is: <strong>${otp}</strong></p><p>This code will expire in 5 minutes.</p>`,
     });
 
-    if (error) {
-      console.error('Resend API Error:', error);
-      // Return the specific Resend error so the user can see it on the frontend
-      return NextResponse.json({ error: `Resend Error: ${error.message}` }, { status: 400 });
-    }
-
-    return NextResponse.json({ success: true, message: 'OTP sent successfully.', data });
+    return NextResponse.json({ success: true, message: 'OTP sent successfully.' });
   } catch (error) {
     console.error('OTP Send Error:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
