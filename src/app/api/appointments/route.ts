@@ -62,7 +62,32 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Invalid Indian phone number.' }, { status: 400 });
     }
 
-    // 3. Auto-Create Patient Profile or Link Existing
+    // 3. Check for double booking (Server-side validation)
+    const startOfDay = new Date(date);
+    startOfDay.setUTCHours(0, 0, 0, 0);
+
+    const endOfDay = new Date(date);
+    endOfDay.setUTCHours(23, 59, 59, 999);
+
+    const existingAppointment = await prisma.appointment.findFirst({
+      where: {
+        doctorId: doctorId || null,
+        time: time,
+        date: {
+          gte: startOfDay,
+          lte: endOfDay,
+        },
+        status: {
+          not: 'CANCELLED'
+        }
+      }
+    });
+
+    if (existingAppointment) {
+      return NextResponse.json({ error: 'This time slot is already booked. Please choose another time.' }, { status: 409 });
+    }
+
+    // 4. Auto-Create Patient Profile or Link Existing
     let user = await prisma.user.findUnique({
       where: { email }
     });
@@ -76,7 +101,7 @@ export async function POST(req: Request) {
       });
     }
 
-    // 4. Save to PostgreSQL Database using Prisma
+    // 5. Save to PostgreSQL Database using Prisma
     const appointment = await prisma.appointment.create({
       data: {
         name,
