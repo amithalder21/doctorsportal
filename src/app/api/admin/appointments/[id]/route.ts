@@ -16,7 +16,18 @@ async function verifyAdminAccess() {
   if (!role || !adminId) {
     return { authorized: false, role: null, adminId: null };
   }
-  return { authorized: true, role, adminId };
+
+  // Verify the admin actually exists in the DB (prevents 500 errors if manually deleted)
+  const admin = await prisma.user.findUnique({
+    where: { id: adminId },
+    select: { id: true, role: true }
+  });
+
+  if (!admin) {
+    return { authorized: false, role: null, adminId: null };
+  }
+
+  return { authorized: true, role: admin.role, adminId };
 }
 
 // PATCH: Update appointment status (SUPERADMIN or ADMIN)

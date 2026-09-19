@@ -24,6 +24,7 @@ export default async function PatientDashboard() {
         orderBy: {
           date: 'desc'
         },
+        take: 50,
         include: {
           doctor: true
         }

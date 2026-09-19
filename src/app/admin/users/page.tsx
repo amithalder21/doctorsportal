@@ -3,11 +3,12 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import UserActions from './UserActions';
 import AddUserForm from './AddUserForm';
+import Pagination from '@/components/Pagination';
 
 export const dynamic = 'force-dynamic';
 const prisma = new PrismaClient();
 
-export default async function UsersPage() {
+export default async function UsersPage({ searchParams }: { searchParams: Promise<{ page?: string }> }) {
   const cookieStore = await cookies();
   const role = cookieStore.get('admin_role')?.value;
 
@@ -16,11 +17,31 @@ export default async function UsersPage() {
     redirect('/admin');
   }
 
+  const params = await searchParams;
+  const currentPage = Number(params.page) || 1;
+  const take = 20;
+  const skip = (currentPage - 1) * take;
+
+  const whereClause = {
+    role: {
+      not: 'PATIENT' as const
+    }
+  };
+
+  const totalUsers = await prisma.user.count({
+    where: whereClause
+  });
+
   const users = await prisma.user.findMany({
+    where: whereClause,
     orderBy: {
       createdAt: 'desc',
     },
+    take,
+    skip,
   });
+
+  const totalPages = Math.ceil(totalUsers / take);
 
   return (
     <div className="p-6 md:p-12">
@@ -83,6 +104,8 @@ export default async function UsersPage() {
                 </table>
               </div>
             </div>
+
+            <Pagination currentPage={currentPage} totalPages={totalPages} />
           </div>
         </div>
       </div>
