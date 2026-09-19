@@ -90,7 +90,12 @@ export default async function AdminDashboard({ searchParams }: { searchParams: P
                   appointments.map((apt) => (
                     <tr key={apt.id} className="hover:bg-gray-50/50 transition-colors">
                       <td className="p-5">
-                        <p className="font-bold text-salute-dark">{apt.name}</p>
+                        <div className="flex items-center gap-2">
+                          <p className="font-bold text-salute-dark">{apt.name}</p>
+                          <span className="text-[10px] font-mono bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded">
+                            {apt.id.startsWith('UIQ-') ? apt.id : `#${apt.id.slice(-6)}`}
+                          </span>
+                        </div>
                         <p className="text-xs text-gray-400 mt-1">{new Date(apt.createdAt).toLocaleString()}</p>
                       </td>
                       <td className="p-5 space-y-2">

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 import Redis from 'ioredis';
+import crypto from 'crypto';
 
 // Initialize Prisma
 const prisma = new PrismaClient();
@@ -135,23 +136,84 @@ export async function POST(req: Request) {
       }
     }
 
+// Helper to generate the patient ID
+async function generatePatientId(prisma: PrismaClient) {
+  const now = new Date();
+  const yy = String(now.getFullYear()).slice(-2);
+  const mm = String(now.getMonth() + 1).padStart(2, '0');
+  const prefix = `UIQ-${yy}-${mm}-`;
+
+  const latestPatient = await prisma.user.findFirst({
+    where: {
+      id: {
+        startsWith: prefix
+      }
+    },
+    orderBy: {
+      createdAt: 'desc'
+    }
+  });
+
+  let nextSequence = 1;
+  if (latestPatient) {
+    const lastSeqStr = latestPatient.id.split('-').pop(); 
+    if (lastSeqStr && !isNaN(Number(lastSeqStr))) {
+      nextSequence = parseInt(lastSeqStr, 10) + 1;
+    }
+  }
+
+  return `${prefix}${String(nextSequence).padStart(4, '0')}`;
+}
+
     // 4. Auto-Create Patient Profile or Link Existing
     let user = await prisma.user.findUnique({
       where: { email }
     });
 
     if (!user) {
-      user = await prisma.user.create({
-        data: {
-          email,
-          role: 'PATIENT'
+      let retries = 3;
+      while (retries > 0) {
+        try {
+          const newPatientId = await generatePatientId(prisma);
+          user = await prisma.user.create({
+            data: {
+              id: newPatientId,
+              email,
+              role: 'PATIENT'
+            }
+          });
+          break;
+        } catch (error: any) {
+          if (error.code === 'P2002') {
+            if (error.meta?.target?.includes('email')) {
+               const existing = await prisma.user.findUnique({ where: { email } });
+               if (existing) {
+                 user = existing;
+                 break;
+               }
+            }
+            if (error.meta?.target?.includes('id')) {
+               retries--;
+               if (retries === 0) throw error;
+            }
+          } else {
+            throw error;
+          }
         }
-      });
+      }
     }
+    
+    // Safety check just in case retry loop failed silently
+    if (!user) throw new Error("Failed to resolve patient profile");
 
-    // 5. Save to PostgreSQL Database using Prisma
+    // 5. Generate custom Appointment ID
+    const randomHex = crypto.randomBytes(3).toString('hex'); // 6 hex characters
+    const appointmentId = `${user.id}-${randomHex}`;
+
+    // 6. Save to PostgreSQL Database using Prisma
     const appointment = await prisma.appointment.create({
       data: {
+        id: appointmentId,
         name,
         phone,
         email,

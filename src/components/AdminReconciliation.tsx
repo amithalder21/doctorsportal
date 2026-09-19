@@ -120,7 +120,10 @@ export default function AdminReconciliation({ selectedDate }: { selectedDate: st
                     <span className="text-gray-500 text-xs ml-2 bg-gray-100 px-2 py-0.5 rounded-full">{log.admin.role}</span>
                   </p>
                   <p className="text-sm text-gray-600 mt-1">
-                    {log.action.replace(/_/g, ' ')} for Appointment <span className="font-mono text-xs bg-gray-100 px-1 rounded">{log.targetId.slice(-6)}</span>
+                    {log.action.replace(/_/g, ' ')} for Appointment{' '}
+                    <span className="font-mono text-xs bg-gray-100 px-1 rounded">
+                      {log.targetId.startsWith('UIQ-') ? log.targetId : `#${log.targetId.slice(-6)}`}
+                    </span>
                   </p>
                   {log.details && (
                     <p className="text-xs text-gray-400 mt-1">{log.details}</p>
