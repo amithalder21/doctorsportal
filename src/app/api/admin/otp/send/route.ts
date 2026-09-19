@@ -1,21 +1,15 @@
 import { NextResponse } from 'next/server';
-import { Redis } from '@upstash/redis';
+import Redis from 'ioredis';
 import { Resend } from 'resend';
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-const url = process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL;
-const token = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN;
-
-if (!url || !token) {
-  console.warn("Redis is not configured properly. Missing URL or Token.");
+const redisUrl = process.env.REDIS_URL;
+if (!redisUrl) {
+  console.warn("Redis URL is not configured properly in REDIS_URL.");
 }
-
-const redis = new Redis({
-  url: url || 'https://upstash.io',
-  token: token || 'dummy_token',
-});
+const redis = new Redis(redisUrl || '');
 
 export async function POST(req: Request) {
   try {
@@ -40,7 +34,7 @@ export async function POST(req: Request) {
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
     // Store OTP in Redis with a 5-minute expiration
-    await redis.set(`admin_otp_${email.toLowerCase()}`, otp, { ex: 300 });
+    await redis.set(`admin_otp_${email.toLowerCase()}`, otp, 'EX', 300);
 
     // Send the email via Resend
     const { data, error } = await resend.emails.send({

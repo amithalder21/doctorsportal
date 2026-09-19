@@ -1,49 +1,35 @@
 import { NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
-import { Redis } from '@upstash/redis';
-import { Ratelimit } from '@upstash/ratelimit';
+import Redis from 'ioredis';
 
 // Initialize Prisma
 const prisma = new PrismaClient();
 
-const url = process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL;
-const token = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN;
-
-if (!url || !token) {
-  console.warn("Redis is not configured properly. Missing URL or Token.");
+// Connect to Redis using the REDIS_URL environment variable
+const redisUrl = process.env.REDIS_URL;
+if (!redisUrl) {
+  console.warn("Redis URL is not configured properly in REDIS_URL.");
 }
-
-const redis = new Redis({
-  url: url || 'https://upstash.io',
-  token: token || 'dummy_token',
-});
-
-// Create a new ratelimiter, that allows 3 requests per 1 hour
-const ratelimit = new Ratelimit({
-  redis: redis,
-  limiter: Ratelimit.slidingWindow(3, "1 h"),
-});
+const redis = new Redis(redisUrl || '');
 
 export async function POST(req: Request) {
   try {
-    // 1. Rate Limiting
-    // Get IP address from headers, fallback to a default string if missing
+    // 1. Rate Limiting using ioredis directly
     const ip = req.headers.get('x-forwarded-for') ?? 'anonymous';
-    const { success, limit, reset, remaining } = await ratelimit.limit(
-      `ratelimit_appointment_${ip}`
-    );
+    const rateLimitKey = `ratelimit_appointment_${ip}`;
+    
+    // Increment the number of requests for this IP
+    const requests = await redis.incr(rateLimitKey);
+    
+    // If it's the first request, set the expiration to 1 hour (3600 seconds)
+    if (requests === 1) {
+      await redis.expire(rateLimitKey, 3600);
+    }
 
-    if (!success) {
+    if (requests > 3) {
       return NextResponse.json(
         { error: 'Too many requests. Please try again later.' },
-        {
-          status: 429,
-          headers: {
-            'X-RateLimit-Limit': limit.toString(),
-            'X-RateLimit-Remaining': remaining.toString(),
-            'X-RateLimit-Reset': reset.toString(),
-          },
-        }
+        { status: 429 }
       );
     }
 
