@@ -290,7 +290,7 @@ export default function Contact() {
               </div>
               
               <button disabled={status.type === 'loading'} type="submit" className="w-full py-5 bg-salute-secondary hover:bg-[#ff7575] disabled:bg-[#ff7575]/50 disabled:cursor-not-allowed text-white rounded-xl font-bold transition-all shadow-[0_10px_20px_-10px_rgba(255,141,141,0.5)] hover:shadow-[0_15px_25px_-10px_rgba(255,141,141,0.6)] hover:-translate-y-1 relative z-10 text-sm uppercase tracking-wider">
-                {status.type === 'loading' ? 'Submitting...' : 'Submit Request'}
+                {status.type === 'loading' ? 'Confirming...' : 'Confirm Appointment'}
               </button>
             </form>
           </motion.div>
