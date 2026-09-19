@@ -94,16 +94,20 @@ export default function Contact() {
 
       // Handle File Upload if a file is selected
       if (fileInputRef.current?.files && fileInputRef.current.files.length > 0) {
-        const file = fileInputRef.current.files[0];
-        const sanitizedName = file.name.replace(/[^a-zA-Z0-9.\-]/g, '_');
+        const files = Array.from(fileInputRef.current.files);
+        const uploadedUrls = [];
         
-        // Upload the file to Vercel Blob
-        const blob = await upload(sanitizedName, file, {
-          access: 'private',
-          handleUploadUrl: '/api/upload',
-        });
+        for (const file of files) {
+          const sanitizedName = file.name.replace(/[^a-zA-Z0-9.\-]/g, '_');
+          // Upload the file to Vercel Blob
+          const blob = await upload(sanitizedName, file, {
+            access: 'private',
+            handleUploadUrl: '/api/upload',
+          });
+          uploadedUrls.push(blob.url);
+        }
         
-        documentUrl = blob.url;
+        documentUrl = uploadedUrls.join(',');
       }
 
       const res = await fetch('/api/appointments', {
@@ -278,6 +282,7 @@ export default function Contact() {
                     type="file" 
                     ref={fileInputRef}
                     accept=".pdf,image/png,image/jpeg"
+                    multiple
                     className="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-salute-secondary file:text-white hover:file:bg-[#ff7575] file:transition-all cursor-pointer outline-none"
                   />
                   <p className="text-xs text-white/50 mt-2">Upload previous prescriptions, lab results, or referral letters (PDF, PNG, JPG)</p>

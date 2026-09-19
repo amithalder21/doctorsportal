@@ -15,13 +15,11 @@ export default function Header() {
         
         <nav className="hidden md:flex items-center gap-8">
           <Link href="#about" className="text-gray-600 hover:text-salute-secondary font-medium transition-colors">About</Link>
-          <Link href="#services" className="text-gray-600 hover:text-salute-secondary font-medium transition-colors">Services</Link>
+          <Link href="#services" className="text-gray-600 hover:text-salute-secondary font-medium transition-colors">Doctor Profession</Link>
+          <Link href="/patient/login" className="text-salute-primary font-bold hover:text-salute-secondary transition-colors">Patient Login</Link>
         </nav>
         
         <div className="flex items-center gap-2">
-          <Link href="/patient/login" className="hidden md:inline-flex px-6 py-2.5 text-salute-primary font-bold rounded-xl hover:bg-salute-light transition-all border border-transparent hover:border-salute-primary/10">
-            Patient Login
-          </Link>
           <a href="#contact" className="hidden md:inline-flex px-6 py-2.5 bg-salute-secondary text-white font-bold rounded-xl hover:bg-[#ff7575] transition-all shadow-md hover:-translate-y-0.5">
             Book Appointment
           </a>
