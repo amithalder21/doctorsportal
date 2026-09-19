@@ -71,9 +71,10 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Invalid email address.' }, { status: 400 });
     }
 
-    const phoneRegex = /^\+?[0-9\s\-]{10,15}$/;
-    if (!phoneRegex.test(phone)) {
-      return NextResponse.json({ error: 'Invalid phone number.' }, { status: 400 });
+    const phoneRegex = /^(?:\+91|91|0)?[6-9]\d{9}$/;
+    const cleanedPhone = phone.replace(/[\s-]/g, '');
+    if (!phoneRegex.test(cleanedPhone)) {
+      return NextResponse.json({ error: 'Invalid Indian phone number.' }, { status: 400 });
     }
 
     // 3. Save to PostgreSQL Database using Prisma
