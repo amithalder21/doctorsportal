@@ -27,9 +27,7 @@ export async function POST(req: Request) {
     const adminEmail = process.env.ADMIN_EMAIL;
 
     if (!adminEmail || email.toLowerCase() !== adminEmail.toLowerCase()) {
-      // Return a generic success to prevent email enumeration attacks
-      // but obviously we don't actually send the email or store the OTP
-      return NextResponse.json({ success: true, message: 'If the email matches an admin account, an OTP has been sent.' });
+      return NextResponse.json({ error: 'Unauthorized admin email address.' }, { status: 403 });
     }
 
     // Generate a 6-digit OTP
@@ -39,14 +37,20 @@ export async function POST(req: Request) {
     await redis.set(`admin_otp_${email.toLowerCase()}`, otp, { ex: 300 });
 
     // Send the email via Resend
-    await resend.emails.send({
+    const { data, error } = await resend.emails.send({
       from: 'Doctor Portal <onboarding@resend.dev>',
       to: adminEmail,
       subject: 'Your Admin Login OTP',
       html: `<p>Your one-time password to log into the Admin Dashboard is: <strong>${otp}</strong></p><p>This code will expire in 5 minutes.</p>`,
     });
 
-    return NextResponse.json({ success: true, message: 'OTP sent successfully.' });
+    if (error) {
+      console.error('Resend API Error:', error);
+      // Return the specific Resend error so the user can see it on the frontend
+      return NextResponse.json({ error: `Resend Error: ${error.message}` }, { status: 400 });
+    }
+
+    return NextResponse.json({ success: true, message: 'OTP sent successfully.', data });
   } catch (error) {
     console.error('OTP Send Error:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
