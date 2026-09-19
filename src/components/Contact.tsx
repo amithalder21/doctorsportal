@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+import { upload } from '@vercel/blob/client';
 
 export default function Contact() {
   const [date, setDate] = useState('');
@@ -13,6 +14,7 @@ export default function Contact() {
     website: '' // honeypot field for spam prevention
   });
   const [status, setStatus] = useState<{ type: 'idle' | 'loading' | 'success' | 'error', message?: string }>({ type: 'idle' });
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
   const timeSlots = [
     "09:00 AM", "09:30 AM", "10:00 AM", "10:30 AM",
@@ -57,10 +59,25 @@ export default function Contact() {
     setStatus({ type: 'loading' });
     
     try {
+      let documentUrl = null;
+
+      // Handle File Upload if a file is selected
+      if (fileInputRef.current?.files && fileInputRef.current.files.length > 0) {
+        const file = fileInputRef.current.files[0];
+        
+        // Upload the file to Vercel Blob
+        const blob = await upload(file.name, file, {
+          access: 'public',
+          handleUploadUrl: '/api/upload',
+        });
+        
+        documentUrl = blob.url;
+      }
+
       const res = await fetch('/api/appointments', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...formData, date, time: timeSlot }),
+        body: JSON.stringify({ ...formData, date, time: timeSlot, documentUrl }),
       });
       
       const data = await res.json();
@@ -73,6 +90,9 @@ export default function Contact() {
       setFormData({ name: '', phone: '', email: '', message: '', website: '' });
       setDate('');
       setTimeSlot('');
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
     } catch (err: any) {
       setStatus({ type: 'error', message: err.message });
     }
@@ -179,6 +199,19 @@ export default function Contact() {
                 </div>
               </div>
               
+              <div className="space-y-2 mb-6 relative z-10">
+                <label className="text-sm font-bold text-white/80 uppercase tracking-wide">Medical Records (Optional)</label>
+                <div className="w-full px-5 py-4 rounded-xl bg-white/10 border border-white/20 text-white/80 focus-within:ring-2 focus-within:ring-salute-secondary focus-within:border-transparent transition-all backdrop-blur-sm relative">
+                  <input 
+                    type="file" 
+                    ref={fileInputRef}
+                    accept=".pdf,image/png,image/jpeg"
+                    className="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-salute-secondary file:text-white hover:file:bg-[#ff7575] file:transition-all cursor-pointer outline-none"
+                  />
+                  <p className="text-xs text-white/50 mt-2">Upload previous prescriptions, lab results, or referral letters (PDF, PNG, JPG)</p>
+                </div>
+              </div>
+
               <div className="space-y-2 mb-10 relative z-10">
                 <label className="text-sm font-bold text-white/80 uppercase tracking-wide">Message (Optional)</label>
                 <textarea rows={4} name="message" value={formData.message} onChange={handleInputChange} className="w-full px-5 py-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:ring-2 focus:ring-salute-secondary focus:border-transparent outline-none transition-all resize-none backdrop-blur-sm" placeholder="How can we help you?"></textarea>

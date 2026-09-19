@@ -8,14 +8,15 @@ datasource db {
 }
 
 model Appointment {
-  id        String   @id @default(cuid())
-  name      String
-  phone     String
-  email     String
-  date      DateTime
-  time      String
-  message   String?
-  createdAt DateTime @default(now())
+  id          String   @id @default(cuid())
+  name        String
+  phone       String
+  email       String
+  date        DateTime
+  time        String
+  message     String?
+  documentUrl String?
+  createdAt   DateTime @default(now())
 }
 
 enum Role {

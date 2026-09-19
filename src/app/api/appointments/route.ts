@@ -35,7 +35,7 @@ export async function POST(req: Request) {
 
     // 2. Parse and Validate Request Body
     const body = await req.json();
-    const { name, phone, email, date, time, message, website } = body;
+    const { name, phone, email, date, time, message, website, documentUrl } = body;
 
     // Spam Trap / Honeypot
     if (website) {
@@ -71,6 +71,7 @@ export async function POST(req: Request) {
         date: new Date(date),
         time,
         message: message || null,
+        documentUrl: documentUrl || null,
       },
     });
 
