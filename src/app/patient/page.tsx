@@ -32,6 +32,10 @@ export default async function PatientDashboard() {
 
   const { appointments } = user;
 
+  const latestApt = appointments[0];
+  const patientName = latestApt?.name || 'Patient';
+  const patientPhone = latestApt?.phone || '';
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'CONFIRMED': return 'bg-green-100 text-green-800';
@@ -61,7 +65,7 @@ export default async function PatientDashboard() {
             </Link>
             
             <div className="flex items-center gap-4">
-              <span className="text-sm font-medium opacity-80">{user.email}</span>
+              <span className="text-sm font-bold">Welcome, {patientName.split(' ')[0]}</span>
             </div>
           </div>
         </div>
@@ -69,13 +73,40 @@ export default async function PatientDashboard() {
 
       <main className="flex-grow p-6 md:p-12">
         <div className="max-w-5xl mx-auto">
-          <div className="flex items-center justify-between mb-10">
+          {/* Patient Profile Card */}
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 mb-8 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="flex items-center gap-5 w-full">
+              <div className="w-16 h-16 flex-shrink-0 bg-salute-primary/10 text-salute-primary rounded-full flex items-center justify-center font-bold text-2xl font-heading">
+                {patientName.charAt(0).toUpperCase()}
+              </div>
+              <div className="flex-grow">
+                <h2 className="text-2xl font-bold text-salute-dark font-heading">{patientName}</h2>
+                <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-6 text-sm text-gray-500 mt-2">
+                  <span className="flex items-center gap-1.5 font-medium">
+                    <svg className="w-4 h-4 text-salute-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                    {user.email}
+                  </span>
+                  {patientPhone && (
+                    <span className="flex items-center gap-1.5 font-medium">
+                      <svg className="w-4 h-4 text-salute-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                      {patientPhone}
+                    </span>
+                  )}
+                </div>
+              </div>
+              <Link href="/#contact" className="hidden md:inline-flex bg-salute-secondary hover:bg-[#ff7575] text-white px-6 py-3 rounded-xl font-bold shadow-lg transition-all hover:-translate-y-1">
+                Book New Appointment
+              </Link>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between mb-8">
             <div>
-              <h1 className="text-3xl font-bold text-salute-dark font-heading">My Appointments</h1>
+              <h1 className="text-2xl font-bold text-salute-dark font-heading">My Appointments</h1>
               <p className="text-gray-500 mt-1">View your medical history and upcoming visits</p>
             </div>
-            <Link href="/#contact" className="bg-salute-secondary hover:bg-[#ff7575] text-white px-6 py-3 rounded-xl font-bold shadow-lg transition-all hover:-translate-y-1">
-              Book New Appointment
+            <Link href="/#contact" className="md:hidden bg-salute-secondary hover:bg-[#ff7575] text-white px-4 py-2 text-sm rounded-xl font-bold shadow-sm transition-all hover:-translate-y-0.5">
+              Book New
             </Link>
           </div>
 
