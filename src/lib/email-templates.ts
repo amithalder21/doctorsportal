@@ -27,7 +27,7 @@ export const getAppointmentReceivedEmail = (name: string, date: string, time: st
   return `
     <div style="${baseStyles}">
       <div style="${headerStyles}">
-        <h1 style="color: #132573; margin: 0;">Salute Care</h1>
+        <h1 style="color: #132573; margin: 0;">Ankit Gaur Clinic</h1>
       </div>
       <div style="font-size: 16px; line-height: 1.6;">
         <p>Dear <strong>${name}</strong>,</p>
@@ -45,10 +45,10 @@ export const getAppointmentReceivedEmail = (name: string, date: string, time: st
         
         <p>If you have any questions in the meantime, please contact our clinic.</p>
         
-        <p style="margin-top: 30px;">Best Regards,<br/><strong>The Salute Care Team</strong></p>
+        <p style="margin-top: 30px;">Best Regards,<br/><strong>The Ankit Gaur Clinic Team</strong></p>
       </div>
       <div style="${footerStyles}">
-        <p>© ${new Date().getFullYear()} Salute Care Clinic. All rights reserved.</p>
+        <p>© ${new Date().getFullYear()} Ankit Gaur Clinic. All rights reserved.</p>
       </div>
     </div>
   `;
@@ -58,7 +58,7 @@ export const getAppointmentConfirmedEmail = (name: string, date: string, time: s
   return `
     <div style="${baseStyles}">
       <div style="${headerStyles}">
-        <h1 style="color: #132573; margin: 0;">Salute Care</h1>
+        <h1 style="color: #132573; margin: 0;">Ankit Gaur Clinic</h1>
       </div>
       <div style="font-size: 16px; line-height: 1.6;">
         <p>Dear <strong>${name}</strong>,</p>
@@ -74,10 +74,10 @@ export const getAppointmentConfirmedEmail = (name: string, date: string, time: s
         
         <p>If you need to reschedule or have any questions, please contact our clinic.</p>
         
-        <p style="margin-top: 30px;">Best Regards,<br/><strong>The Salute Care Team</strong></p>
+        <p style="margin-top: 30px;">Best Regards,<br/><strong>The Ankit Gaur Clinic Team</strong></p>
       </div>
       <div style="${footerStyles}">
-        <p>© ${new Date().getFullYear()} Salute Care Clinic. All rights reserved.</p>
+        <p>© ${new Date().getFullYear()} Ankit Gaur Clinic. All rights reserved.</p>
       </div>
     </div>
   `;
@@ -87,7 +87,7 @@ export const getAppointmentCancelledEmail = (name: string, date: string, time: s
   return `
     <div style="${baseStyles}">
       <div style="${headerStyles}">
-        <h1 style="color: #132573; margin: 0;">Salute Care</h1>
+        <h1 style="color: #132573; margin: 0;">Ankit Gaur Clinic</h1>
       </div>
       <div style="font-size: 16px; line-height: 1.6;">
         <p>Dear <strong>${name}</strong>,</p>
@@ -101,10 +101,10 @@ export const getAppointmentCancelledEmail = (name: string, date: string, time: s
 
         <p>We apologize for any inconvenience this may cause. If you would like to book a new appointment, please visit our website.</p>
         
-        <p style="margin-top: 30px;">Best Regards,<br/><strong>The Salute Care Team</strong></p>
+        <p style="margin-top: 30px;">Best Regards,<br/><strong>The Ankit Gaur Clinic Team</strong></p>
       </div>
       <div style="${footerStyles}">
-        <p>© ${new Date().getFullYear()} Salute Care Clinic. All rights reserved.</p>
+        <p>© ${new Date().getFullYear()} Ankit Gaur Clinic. All rights reserved.</p>
       </div>
     </div>
   `;
@@ -114,7 +114,7 @@ export const getOtpEmail = (otp: string, role: string) => {
   return `
     <div style="${baseStyles}">
       <div style="${headerStyles}">
-        <h1 style="color: #132573; margin: 0;">Salute Care</h1>
+        <h1 style="color: #132573; margin: 0;">Ankit Gaur Clinic</h1>
       </div>
       <div style="font-size: 16px; line-height: 1.6; text-align: center;">
         <p>Hello,</p>
@@ -128,7 +128,7 @@ export const getOtpEmail = (otp: string, role: string) => {
         <p style="font-size: 14px; color: #6b7280;">This code will expire in 5 minutes. If you did not request this code, please ignore this email.</p>
       </div>
       <div style="${footerStyles}">
-        <p>© ${new Date().getFullYear()} Salute Care Clinic. All rights reserved.</p>
+        <p>© ${new Date().getFullYear()} Ankit Gaur Clinic. All rights reserved.</p>
       </div>
     </div>
   `;
@@ -138,11 +138,11 @@ export const getAppointmentCompletedEmail = (name: string, date: string) => {
   return `
     <div style="${baseStyles}">
       <div style="${headerStyles}">
-        <h1 style="color: #132573; margin: 0;">Salute Care</h1>
+        <h1 style="color: #132573; margin: 0;">Ankit Gaur Clinic</h1>
       </div>
       <div style="font-size: 16px; line-height: 1.6;">
         <p>Dear <strong>${name}</strong>,</p>
-        <p>Thank you for visiting Salute Care on <strong>${date}</strong>. We hope you had a comfortable and satisfactory experience.</p>
+        <p>Thank you for visiting Ankit Gaur Clinic on <strong>${date}</strong>. We hope you had a comfortable and satisfactory experience.</p>
         
         <div style="background-color: #e8f5e9; padding: 20px; border-radius: 12px; margin: 25px 0; border: 1px solid #c8e6c9;">
           <h3 style="margin-top: 0; color: #2e7d32;">Post-Consultation</h3>
@@ -151,10 +151,10 @@ export const getAppointmentCompletedEmail = (name: string, date: string) => {
 
         <p>Your health and well-being are our top priority. We wish you a speedy recovery and excellent health!</p>
         
-        <p style="margin-top: 30px;">Best Regards,<br/><strong>Dr. Ankit Gaur & The Salute Care Team</strong></p>
+        <p style="margin-top: 30px;">Best Regards,<br/><strong>Dr. Ankit Gaur & The Ankit Gaur Clinic Team</strong></p>
       </div>
       <div style="${footerStyles}">
-        <p>© ${new Date().getFullYear()} Salute Care Clinic. All rights reserved.</p>
+        <p>© ${new Date().getFullYear()} Ankit Gaur Clinic. All rights reserved.</p>
       </div>
     </div>
   `;
@@ -164,7 +164,7 @@ export const getPaymentReceiptEmail = (name: string, date: string, appointmentId
   return `
     <div style="${baseStyles}">
       <div style="${headerStyles}">
-        <h1 style="color: #132573; margin: 0;">Salute Care</h1>
+        <h1 style="color: #132573; margin: 0;">Ankit Gaur Clinic</h1>
       </div>
       <div style="font-size: 16px; line-height: 1.6;">
         <p>Dear <strong>${name}</strong>,</p>
@@ -177,12 +177,12 @@ export const getPaymentReceiptEmail = (name: string, date: string, appointmentId
           <p style="margin: 5px 0;"><strong>Status:</strong> <span style="color: #2e7d32; font-weight: bold;">PAID</span></p>
         </div>
 
-        <p>Thank you for choosing Salute Care.</p>
+        <p>Thank you for choosing Ankit Gaur Clinic.</p>
         
-        <p style="margin-top: 30px;">Best Regards,<br/><strong>The Salute Care Team</strong></p>
+        <p style="margin-top: 30px;">Best Regards,<br/><strong>The Ankit Gaur Clinic Team</strong></p>
       </div>
       <div style="${footerStyles}">
-        <p>© ${new Date().getFullYear()} Salute Care Clinic. All rights reserved.</p>
+        <p>© ${new Date().getFullYear()} Ankit Gaur Clinic. All rights reserved.</p>
       </div>
     </div>
   `;

@@ -135,7 +135,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
           subject = 'Your Appointment has been Cancelled';
           htmlContent = getAppointmentCancelledEmail(updated.name, dateStr, updated.time);
         } else if (status === 'COMPLETED') {
-          subject = 'Thank You for Visiting Salute Care';
+          subject = 'Thank You for Visiting Ankit Gaur Clinic';
           htmlContent = getAppointmentCompletedEmail(updated.name, dateStr);
         }
 
@@ -157,7 +157,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
         try {
           await sendEmail({
             to: updated.email,
-            subject: 'Payment Receipt - Salute Care',
+            subject: 'Payment Receipt - Ankit Gaur Clinic',
             html: getPaymentReceiptEmail(updated.name, dateStr, updated.id),
           });
         } catch (emailError) {

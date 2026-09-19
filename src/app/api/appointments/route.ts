@@ -240,7 +240,7 @@ async function generatePatientId(prisma: PrismaClient) {
 
       await sendEmail({
         to: email,
-        subject: 'Appointment Request Received - Salute Care',
+        subject: 'Appointment Request Received - Ankit Gaur Clinic',
         html: htmlContent,
       });
     } catch (emailError) {
