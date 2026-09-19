@@ -2,6 +2,7 @@
 
 import { useState, useRef } from 'react';
 import { upload } from '@vercel/blob/client';
+import { motion } from 'framer-motion';
 
 export default function Contact() {
   const [date, setDate] = useState('');
@@ -103,7 +104,13 @@ export default function Contact() {
     <section className="py-24 bg-white" id="contact">
       <div className="container mx-auto px-6">
         <div className="flex flex-col lg:flex-row gap-16">
-          <div className="w-full lg:w-1/3 space-y-8">
+          <motion.div 
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8 }}
+            className="w-full lg:w-1/3 space-y-8"
+          >
             <div>
               <h4 className="text-salute-secondary font-bold tracking-wider uppercase text-sm mb-3">Contact Us</h4>
               <h2 className="text-4xl md:text-5xl font-bold text-salute-dark mt-2 mb-6 font-heading">Get In Touch</h2>
@@ -141,9 +148,15 @@ export default function Contact() {
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
           
-          <div className="w-full lg:w-2/3">
+          <motion.div 
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="w-full lg:w-2/3"
+          >
             <form onSubmit={handleSubmit} className="bg-salute-primary p-10 md:p-14 rounded-[40px] shadow-2xl relative overflow-hidden">
               {/* Decorative circle in form */}
               <div className="absolute -top-24 -right-24 w-64 h-64 bg-salute-accent rounded-full opacity-10"></div>
@@ -192,7 +205,7 @@ export default function Contact() {
                   {timeSlots.map((time) => (
                     <label key={time} className="cursor-pointer">
                       <input type="radio" name="timeSlot" value={time} checked={timeSlot === time} onChange={() => setTimeSlot(time)} className="peer sr-only" required />
-                      <div className="text-center px-2 py-3 rounded-xl border border-white/20 text-white/80 peer-checked:bg-salute-secondary peer-checked:text-white peer-checked:border-salute-secondary hover:bg-white/10 transition-all text-sm font-bold">
+                      <div className="text-center px-2 py-3 rounded-xl border border-white/20 text-white/80 peer-checked:bg-salute-secondary peer-checked:text-white peer-checked:border-salute-secondary hover:bg-white/20 hover:text-white transition-all text-sm font-bold">
                         {time}
                       </div>
                     </label>
@@ -202,7 +215,7 @@ export default function Contact() {
               
               <div className="space-y-2 mb-6 relative z-10">
                 <label className="text-sm font-bold text-white/80 uppercase tracking-wide">Medical Records (Optional)</label>
-                <div className="w-full px-5 py-4 rounded-xl bg-white/10 border border-white/20 text-white/80 focus-within:ring-2 focus-within:ring-salute-secondary focus-within:border-transparent transition-all backdrop-blur-sm relative">
+                <div className="w-full px-5 py-4 rounded-xl bg-white/10 border border-white/20 text-white/80 focus-within:ring-2 focus-within:ring-salute-secondary focus-within:border-transparent transition-all backdrop-blur-sm relative hover:bg-white/15">
                   <input 
                     type="file" 
                     ref={fileInputRef}
@@ -218,11 +231,11 @@ export default function Contact() {
                 <textarea rows={4} name="message" value={formData.message} onChange={handleInputChange} className="w-full px-5 py-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:ring-2 focus:ring-salute-secondary focus:border-transparent outline-none transition-all resize-none backdrop-blur-sm" placeholder="How can we help you?"></textarea>
               </div>
               
-              <button disabled={status.type === 'loading'} type="submit" className="w-full py-5 bg-salute-secondary hover:bg-[#ff7575] disabled:bg-[#ff7575]/50 disabled:cursor-not-allowed text-white rounded-xl font-bold transition-all shadow-[0_10px_20px_-10px_rgba(255,141,141,0.5)] hover:-translate-y-1 relative z-10 text-sm uppercase tracking-wider">
+              <button disabled={status.type === 'loading'} type="submit" className="w-full py-5 bg-salute-secondary hover:bg-[#ff7575] disabled:bg-[#ff7575]/50 disabled:cursor-not-allowed text-white rounded-xl font-bold transition-all shadow-[0_10px_20px_-10px_rgba(255,141,141,0.5)] hover:shadow-[0_15px_25px_-10px_rgba(255,141,141,0.6)] hover:-translate-y-1 relative z-10 text-sm uppercase tracking-wider">
                 {status.type === 'loading' ? 'Submitting...' : 'Submit Request'}
               </button>
             </form>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

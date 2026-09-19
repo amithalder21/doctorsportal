@@ -1,3 +1,7 @@
+"use client";
+
+import { motion } from 'framer-motion';
+
 const services = [
   {
     title: 'Obstetrics Care',
@@ -43,28 +47,56 @@ const services = [
   }
 ];
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+};
+
 export default function Services() {
   return (
     <section className="py-24 bg-salute-accent/30 relative" id="services">
       <div className="container mx-auto px-6 relative z-10">
-        <div className="text-center max-w-2xl mx-auto mb-20">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6 }}
+          className="text-center max-w-2xl mx-auto mb-20"
+        >
           <h4 className="text-salute-primary font-bold tracking-wider uppercase text-sm mb-3">Our Services</h4>
           <h2 className="text-4xl md:text-5xl font-bold text-salute-dark mt-2 mb-6 font-heading">Comprehensive Care</h2>
           <p className="text-gray-600 text-lg">
             We offer a wide range of specialized services tailored to meet the unique healthcare needs of women at every stage of life.
           </p>
-        </div>
+        </motion.div>
         
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
+        <motion.div 
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          className="grid md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12"
+        >
           {services.map((service, index) => (
-            <div 
+            <motion.div 
               key={index}
+              variants={itemVariants}
               className="bg-white rounded-tr-[40px] rounded-bl-[40px] p-10 shadow-[0_10px_40px_-15px_rgba(0,0,0,0.05)] hover:shadow-[0_20px_50px_-15px_rgba(19,37,115,0.15)] transition-all duration-300 border border-salute-accent group relative overflow-hidden"
             >
               <div className="absolute top-0 right-0 w-32 h-32 bg-salute-light rounded-bl-[100px] z-0 transition-all duration-300 group-hover:bg-salute-accent"></div>
               
               <div className="relative z-10">
-                <div className="w-16 h-16 bg-salute-primary text-white flex items-center justify-center rounded-tl-2xl rounded-br-2xl mb-8 group-hover:-translate-y-2 transition-transform duration-300">
+                <div className="w-16 h-16 bg-salute-primary text-white flex items-center justify-center rounded-tl-2xl rounded-br-2xl mb-8 group-hover:-translate-y-2 transition-transform duration-300 shadow-md">
                   {service.icon}
                 </div>
                 <h3 className="text-xl font-bold text-salute-dark mb-4 font-heading">{service.title}</h3>
@@ -72,9 +104,9 @@ export default function Services() {
                   {service.description}
                 </p>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
         
         <div className="mt-20 text-center">
           {/* Button removed to reduce clutter */}
