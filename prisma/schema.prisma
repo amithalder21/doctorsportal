@@ -7,8 +7,15 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum AppointmentStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+}
+
 model Appointment {
-  id          String   @id @default(cuid())
+  id          String            @id @default(cuid())
   name        String
   phone       String
   email       String
@@ -16,7 +23,8 @@ model Appointment {
   time        String
   message     String?
   documentUrl String?
-  createdAt   DateTime @default(now())
+  status      AppointmentStatus @default(PENDING)
+  createdAt   DateTime          @default(now())
 }
 
 enum Role {
