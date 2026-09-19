@@ -226,7 +226,29 @@ async function generatePatientId(prisma: PrismaClient) {
       },
     });
 
-    // 4. Return Success Response
+    // 7. Send "Request Received" email
+    try {
+      const { sendEmail } = await import('@/lib/email');
+      const { getAppointmentReceivedEmail } = await import('@/lib/email-templates');
+      
+      const htmlContent = getAppointmentReceivedEmail(
+        name, 
+        new Date(date).toLocaleDateString(), 
+        time,
+        appointmentId
+      );
+
+      await sendEmail({
+        to: email,
+        subject: 'Appointment Request Received - Salute Care',
+        html: htmlContent,
+      });
+    } catch (emailError) {
+      console.error('Failed to send received email:', emailError);
+      // We don't fail the appointment creation if email fails
+    }
+
+    // 8. Return Success Response
     return NextResponse.json(
       { success: true, data: appointment },
       { status: 201 }

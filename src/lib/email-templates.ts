@@ -23,6 +23,37 @@ const footerStyles = `
   color: #9ca3af;
 `;
 
+export const getAppointmentReceivedEmail = (name: string, date: string, time: string, appointmentId: string) => {
+  return `
+    <div style="${baseStyles}">
+      <div style="${headerStyles}">
+        <h1 style="color: #132573; margin: 0;">Salute Care</h1>
+      </div>
+      <div style="font-size: 16px; line-height: 1.6;">
+        <p>Dear <strong>${name}</strong>,</p>
+        <p>We have successfully received your appointment request. Your request is currently <strong>Pending Confirmation</strong>.</p>
+        
+        <div style="background-color: #fcf8e3; padding: 20px; border-radius: 12px; margin: 25px 0; border: 1px solid #faebcc;">
+          <h3 style="margin-top: 0; color: #8a6d3b;">Appointment Request Details</h3>
+          <p style="margin: 5px 0;"><strong>Request ID:</strong> ${appointmentId}</p>
+          <p style="margin: 5px 0;"><strong>Date:</strong> ${date}</p>
+          <p style="margin: 5px 0;"><strong>Time:</strong> ${time}</p>
+          <p style="margin: 5px 0;"><strong>Status:</strong> Pending Review</p>
+        </div>
+
+        <p>Our staff will review your request and you will receive another email once your appointment is confirmed.</p>
+        
+        <p>If you have any questions in the meantime, please contact our clinic.</p>
+        
+        <p style="margin-top: 30px;">Best Regards,<br/><strong>The Salute Care Team</strong></p>
+      </div>
+      <div style="${footerStyles}">
+        <p>© ${new Date().getFullYear()} Salute Care Clinic. All rights reserved.</p>
+      </div>
+    </div>
+  `;
+};
+
 export const getAppointmentConfirmedEmail = (name: string, date: string, time: string) => {
   return `
     <div style="${baseStyles}">
