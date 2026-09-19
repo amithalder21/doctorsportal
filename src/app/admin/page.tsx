@@ -37,6 +37,9 @@ export default async function AdminDashboard({ searchParams }: { searchParams: P
     orderBy: {
       date: 'asc', // Sort by date first since we might be filtering
     },
+    include: {
+      doctor: true,
+    }
   });
 
   return (
@@ -99,6 +102,12 @@ export default async function AdminDashboard({ searchParams }: { searchParams: P
                           <span className="text-sm font-bold text-salute-primary">{new Date(apt.date).toLocaleDateString()}</span>
                           <span className="text-xs text-salute-primary/80 font-medium">{apt.time}</span>
                         </div>
+                        {apt.doctor && (
+                          <div className="mt-2 flex items-center gap-1.5 text-xs font-medium text-gray-500">
+                            <svg className="w-3.5 h-3.5 text-salute-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                            {apt.doctor.name}
+                          </div>
+                        )}
                       </td>
                       <td className="p-5">
                         {role === 'RECEPTION' ? (
