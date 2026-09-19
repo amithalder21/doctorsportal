@@ -14,11 +14,13 @@ export default function Header() {
           <Link href="#contact" className="text-gray-600 hover:text-salute-secondary font-medium transition-colors">Contact</Link>
         </nav>
         
-        <div className="flex items-center">
+        <div className="flex items-center gap-2">
+          <Link href="/patient/login" className="hidden md:inline-flex px-6 py-2.5 text-salute-primary font-bold rounded-xl hover:bg-salute-light transition-all border border-transparent hover:border-salute-primary/10">
+            Patient Login
+          </Link>
           <a href="#contact" className="hidden md:inline-flex px-6 py-2.5 bg-salute-secondary text-white font-bold rounded-xl hover:bg-[#ff7575] transition-all shadow-md hover:-translate-y-0.5">
             Book Appointment
           </a>
-          
           {/* Mobile Menu Button */}
           <button className="md:hidden p-2 text-salute-primary">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

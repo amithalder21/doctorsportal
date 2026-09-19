@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export default function Footer() {
   return (
     <footer className="bg-salute-primary text-white py-16">
@@ -30,6 +32,7 @@ export default function Footer() {
             <li><a href="#about" className="text-white/70 hover:text-salute-secondary transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-salute-secondary"></span>About</a></li>
             <li><a href="#services" className="text-white/70 hover:text-salute-secondary transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-salute-secondary"></span>Services</a></li>
             <li><a href="#contact" className="text-white/70 hover:text-salute-secondary transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-salute-secondary"></span>Book Appointment</a></li>
+            <li><Link href="/patient/login" className="text-white/70 hover:text-salute-secondary transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-salute-secondary"></span>Patient Portal</Link></li>
           </ul>
         </div>
         <div>
