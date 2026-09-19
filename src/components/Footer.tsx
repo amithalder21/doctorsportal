@@ -4,7 +4,6 @@ export default function Footer() {
       <div className="container mx-auto px-6 grid md:grid-cols-4 gap-12">
         <div className="md:col-span-2">
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 bg-salute-secondary rounded-full flex items-center justify-center font-bold text-white font-heading">S</div>
             <h3 className="text-2xl font-bold text-white font-heading">Dr. Swati Sinha</h3>
           </div>
           <p className="text-white/70 max-w-sm leading-relaxed mb-8">
