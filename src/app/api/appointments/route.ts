@@ -62,7 +62,21 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Invalid Indian phone number.' }, { status: 400 });
     }
 
-    // 3. Save to PostgreSQL Database using Prisma
+    // 3. Auto-Create Patient Profile or Link Existing
+    let user = await prisma.user.findUnique({
+      where: { email }
+    });
+
+    if (!user) {
+      user = await prisma.user.create({
+        data: {
+          email,
+          role: 'PATIENT'
+        }
+      });
+    }
+
+    // 4. Save to PostgreSQL Database using Prisma
     const appointment = await prisma.appointment.create({
       data: {
         name,
@@ -72,6 +86,7 @@ export async function POST(req: Request) {
         time,
         message: message || null,
         documentUrl: documentUrl || null,
+        userId: user.id
       },
     });
 

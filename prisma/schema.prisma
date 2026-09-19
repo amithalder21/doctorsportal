@@ -25,17 +25,28 @@ model Appointment {
   documentUrl String?
   status      AppointmentStatus @default(PENDING)
   createdAt   DateTime          @default(now())
+  
+  // Relations
+  userId      String?
+  user        User?             @relation("PatientAppointments", fields: [userId], references: [id])
+  doctorId    String?
+  doctor      User?             @relation("DoctorAppointments", fields: [doctorId], references: [id])
 }
 
 enum Role {
   SUPERADMIN
-  ADMIN
-  READER
+  DOCTOR
+  RECEPTION
+  PATIENT
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  role      Role     @default(READER)
-  createdAt DateTime @default(now())
+  id                 String        @id @default(cuid())
+  email              String        @unique
+  role               Role          @default(PATIENT)
+  createdAt          DateTime      @default(now())
+  
+  // Relations
+  appointments       Appointment[] @relation("PatientAppointments")
+  doctorAppointments Appointment[] @relation("DoctorAppointments")
 }

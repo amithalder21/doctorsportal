@@ -15,8 +15,10 @@ export default function AdminActions({ id, initialStatus, userRole }: AdminActio
   const [isUpdating, setIsUpdating] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const canEdit = userRole === 'SUPERADMIN' || userRole === 'ADMIN';
-  const canDelete = userRole === 'SUPERADMIN';
+  // SUPERADMIN and DOCTOR have full rights
+  // RECEPTION can edit status but not delete
+  const canEdit = ['SUPERADMIN', 'DOCTOR', 'RECEPTION'].includes(userRole || '');
+  const canDelete = ['SUPERADMIN', 'DOCTOR'].includes(userRole || '');
 
   const handleStatusChange = async (newStatus: string) => {
     if (!canEdit) return;

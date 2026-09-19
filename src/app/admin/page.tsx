@@ -17,16 +17,13 @@ export default async function AdminDashboard() {
   });
 
   return (
-    <div className="min-h-screen bg-salute-light p-6 md:p-12">
+    <div className="p-6 md:p-12">
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-10">
           <div>
             <h1 className="text-3xl font-bold text-salute-dark font-heading">Admin Dashboard</h1>
             <p className="text-gray-500 mt-1 flex items-center gap-2">
               Manage your appointment requests
-              <span className="bg-salute-primary text-white text-xs px-2 py-0.5 rounded font-bold uppercase ml-2 tracking-wider">
-                Role: {role || 'Unknown'}
-              </span>
             </p>
           </div>
           <div className="text-sm font-bold text-salute-primary bg-salute-accent px-4 py-2 rounded-lg">

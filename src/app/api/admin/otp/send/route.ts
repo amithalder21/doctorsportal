@@ -30,6 +30,10 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Unauthorized email address. Not found in database.' }, { status: 403 });
     }
 
+    if (user.role === 'PATIENT') {
+      return NextResponse.json({ error: 'Patients do not have access to the Admin Dashboard.' }, { status: 403 });
+    }
+
     // Generate a 6-digit OTP
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
 

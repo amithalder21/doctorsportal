@@ -2,8 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { PrismaClient } from '@prisma/client';
 import { del } from '@vercel/blob';
+import { Resend } from 'resend';
 
 const prisma = new PrismaClient();
+const resend = new Resend(process.env.RESEND_API_KEY || "re_dummy");
 
 // Reusable function to verify admin access
 async function verifyAdminAccess() {
@@ -21,9 +23,9 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
   const auth = await verifyAdminAccess();
   if (!auth.authorized) return new NextResponse('Unauthorized', { status: 401 });
 
-  // READER role cannot change status
-  if (auth.role === 'READER') {
-    return new NextResponse('Forbidden: Readers cannot modify records', { status: 403 });
+  // PATIENT role cannot change status
+  if (auth.role === 'PATIENT') {
+    return new NextResponse('Forbidden: Patients cannot modify records', { status: 403 });
   }
 
   try {
@@ -38,6 +40,29 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
       where: { id },
       data: { status }
     });
+
+    // Send email notification based on status
+    if (status === 'CONFIRMED' || status === 'CANCELLED') {
+      const subject = status === 'CONFIRMED' 
+        ? 'Your Appointment is Confirmed' 
+        : 'Your Appointment has been Cancelled';
+      
+      const htmlContent = status === 'CONFIRMED'
+        ? `<p>Hello ${updated.name},</p><p>Your appointment for <strong>${new Date(updated.date).toLocaleDateString()}</strong> at <strong>${updated.time}</strong> has been confirmed.</p><p>Thank you!</p>`
+        : `<p>Hello ${updated.name},</p><p>Unfortunately, your appointment for <strong>${new Date(updated.date).toLocaleDateString()}</strong> at <strong>${updated.time}</strong> has been cancelled.</p><p>Please contact us if you have any questions.</p>`;
+
+      try {
+        await resend.emails.send({
+          from: 'Doctor Portal <onboarding@resend.dev>',
+          to: updated.email,
+          subject,
+          html: htmlContent,
+        });
+      } catch (emailError) {
+        console.error('Failed to send status email:', emailError);
+        // We still want to return success for the DB update even if email fails
+      }
+    }
 
     return NextResponse.json(updated);
   } catch (error) {
