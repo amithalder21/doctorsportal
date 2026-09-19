@@ -48,7 +48,7 @@ export default async function UsersPage() {
                 <table className="w-full text-left border-collapse">
                   <thead>
                     <tr className="bg-gray-50/50 border-b border-gray-100">
-                      <th className="p-5 text-sm font-bold text-gray-600 uppercase tracking-wider">Email</th>
+                      <th className="p-5 text-sm font-bold text-gray-600 uppercase tracking-wider">User</th>
                       <th className="p-5 text-sm font-bold text-gray-600 uppercase tracking-wider">Role</th>
                       <th className="p-5 text-sm font-bold text-gray-600 uppercase tracking-wider">Joined On</th>
                       <th className="p-5 text-sm font-bold text-gray-600 uppercase tracking-wider text-right">Actions</th>
@@ -58,7 +58,8 @@ export default async function UsersPage() {
                     {users.map((user) => (
                       <tr key={user.id} className="hover:bg-gray-50/50 transition-colors">
                         <td className="p-5">
-                          <p className="font-bold text-salute-dark">{user.email}</p>
+                          {user.name && <p className="font-bold text-salute-dark">{user.name}</p>}
+                          <p className={`text-salute-dark ${user.name ? 'text-xs text-gray-500 mt-0.5' : 'font-bold'}`}>{user.email}</p>
                         </td>
                         <td className="p-5">
                           <span className={`px-3 py-1 rounded-full text-xs font-bold ${

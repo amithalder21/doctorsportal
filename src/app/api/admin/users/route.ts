@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
   if (!auth.authorized) return auth.error;
 
   try {
-    const { email, role } = await request.json();
+    const { email, role, name } = await request.json();
 
     if (!email || !role) {
       return new NextResponse('Missing email or role', { status: 400 });
@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
     }
 
     const user = await prisma.user.create({
-      data: { email, role }
+      data: { email, role, name: name || null }
     });
 
     return NextResponse.json(user, { status: 201 });
