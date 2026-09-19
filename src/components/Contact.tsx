@@ -231,15 +231,20 @@ export default function Contact() {
               )}
 
               <div className="grid md:grid-cols-2 gap-6 mb-6 relative z-10">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <label className="text-sm font-bold text-white/80 uppercase tracking-wide">First Name</label>
-                    <input required type="text" name="firstName" value={formData.firstName} onChange={handleInputChange} className="w-full px-5 py-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:ring-2 focus:ring-salute-secondary focus:border-transparent outline-none transition-all backdrop-blur-sm" placeholder="Jane" />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-bold text-white/80 uppercase tracking-wide">Last Name</label>
-                    <input required type="text" name="lastName" value={formData.lastName} onChange={handleInputChange} className="w-full px-5 py-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:ring-2 focus:ring-salute-secondary focus:border-transparent outline-none transition-all backdrop-blur-sm" placeholder="Doe" />
-                  </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-white/80 uppercase tracking-wide">First Name</label>
+                  <input required type="text" name="firstName" value={formData.firstName} onChange={handleInputChange} className="w-full px-5 py-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:ring-2 focus:ring-salute-secondary focus:border-transparent outline-none transition-all backdrop-blur-sm" placeholder="Jane" />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-white/80 uppercase tracking-wide">Last Name</label>
+                  <input required type="text" name="lastName" value={formData.lastName} onChange={handleInputChange} className="w-full px-5 py-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:ring-2 focus:ring-salute-secondary focus:border-transparent outline-none transition-all backdrop-blur-sm" placeholder="Doe" />
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-6 mb-6 relative z-10">
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-white/80 uppercase tracking-wide">Email Address</label>
+                  <input required type="email" name="email" value={formData.email} onChange={handleInputChange} className="w-full px-5 py-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:ring-2 focus:ring-salute-secondary focus:border-transparent outline-none transition-all backdrop-blur-sm" placeholder="jane@example.com" />
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-bold text-white/80 uppercase tracking-wide">Phone Number</label>
@@ -248,10 +253,6 @@ export default function Contact() {
               </div>
               
               <div className="grid md:grid-cols-2 gap-6 mb-6 relative z-10">
-                <div className="space-y-2">
-                  <label className="text-sm font-bold text-white/80 uppercase tracking-wide">Email Address</label>
-                  <input required type="email" name="email" value={formData.email} onChange={handleInputChange} className="w-full px-5 py-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:ring-2 focus:ring-salute-secondary focus:border-transparent outline-none transition-all backdrop-blur-sm" placeholder="jane@example.com" />
-                </div>
                 <div className="space-y-2">
                   <label className="text-sm font-bold text-white/80 uppercase tracking-wide">Select Doctor</label>
                   <select required value={doctorId} onChange={(e) => setDoctorId(e.target.value)} className="w-full px-5 py-4 rounded-xl bg-white/10 border border-white/20 text-white focus:ring-2 focus:ring-salute-secondary focus:border-transparent outline-none transition-all backdrop-blur-sm [&>option]:text-salute-dark">
