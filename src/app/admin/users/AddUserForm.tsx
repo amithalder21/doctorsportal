@@ -47,37 +47,44 @@ export default function AddUserForm() {
         </div>
       )}
 
-      <div className="space-y-4">
+      <div className="space-y-5">
         <div>
-          <label className="block text-sm font-bold text-gray-700 mb-1">Email Address</label>
+          <label className="block text-sm font-bold text-gray-700 mb-1.5 uppercase tracking-wider text-xs">Email Address</label>
           <input 
             type="email" 
             required 
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-salute-secondary outline-none"
+            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-salute-primary outline-none transition-all bg-gray-50 focus:bg-white"
             placeholder="user@example.com"
+            autoComplete="off"
+            data-lpignore="true"
           />
         </div>
         
         <div>
-          <label className="block text-sm font-bold text-gray-700 mb-1">Role</label>
-          <select 
-            value={role}
-            onChange={(e) => setRole(e.target.value)}
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-salute-secondary outline-none bg-white"
-          >
-            <option value="SUPERADMIN">Super Admin (Owner)</option>
-            <option value="DOCTOR">Doctor</option>
-            <option value="RECEPTION">Reception</option>
-            <option value="PATIENT">Patient</option>
-          </select>
+          <label className="block text-sm font-bold text-gray-700 mb-1.5 uppercase tracking-wider text-xs">Role</label>
+          <div className="relative">
+            <select 
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              className="w-full px-4 py-3 appearance-none border border-gray-200 rounded-xl focus:ring-2 focus:ring-salute-primary outline-none transition-all bg-gray-50 focus:bg-white cursor-pointer font-medium text-gray-700"
+            >
+              <option value="SUPERADMIN">Super Admin (Owner)</option>
+              <option value="DOCTOR">Doctor</option>
+              <option value="RECEPTION">Reception</option>
+              <option value="PATIENT">Patient</option>
+            </select>
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+            </div>
+          </div>
         </div>
 
         <button 
           type="submit" 
           disabled={isLoading}
-          className="w-full py-2 bg-salute-primary hover:bg-[#ff7575] text-white rounded-lg font-bold transition-colors disabled:opacity-50 mt-4"
+          className="w-full py-3.5 bg-salute-primary hover:bg-salute-dark text-white rounded-xl font-bold transition-all disabled:opacity-50 mt-6 shadow-md hover:shadow-lg hover:-translate-y-0.5 uppercase tracking-wider text-sm"
         >
           {isLoading ? 'Adding...' : 'Add User'}
         </button>
