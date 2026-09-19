@@ -9,7 +9,8 @@ export default function Contact() {
     name: '',
     phone: '',
     email: '',
-    message: ''
+    message: '',
+    website: '' // honeypot field for spam prevention
   });
   const [status, setStatus] = useState<{ type: 'idle' | 'loading' | 'success' | 'error', message?: string }>({ type: 'idle' });
   
@@ -26,6 +27,27 @@ export default function Contact() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Spam trap: If a bot fills out the hidden honeypot field, silently reject
+    if (formData.website) {
+      setStatus({ type: 'success', message: 'Appointment request submitted successfully! We will contact you soon.' });
+      setFormData({ name: '', phone: '', email: '', message: '', website: '' });
+      return;
+    }
+
+    // Strict validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setStatus({ type: 'error', message: 'Please enter a valid email address.' });
+      return;
+    }
+
+    const phoneRegex = /^\+?[0-9\s\-]{10,15}$/;
+    if (!phoneRegex.test(formData.phone)) {
+      setStatus({ type: 'error', message: 'Please enter a valid phone number (10-15 digits).' });
+      return;
+    }
+
     if (!timeSlot) {
       setStatus({ type: 'error', message: 'Please select an available time.' });
       return;
@@ -47,7 +69,7 @@ export default function Contact() {
       }
       
       setStatus({ type: 'success', message: 'Appointment request submitted successfully! We will contact you soon.' });
-      setFormData({ name: '', phone: '', email: '', message: '' });
+      setFormData({ name: '', phone: '', email: '', message: '', website: '' });
       setDate('');
       setTimeSlot('');
     } catch (err: any) {
@@ -105,6 +127,9 @@ export default function Contact() {
               <div className="absolute -top-24 -right-24 w-64 h-64 bg-salute-accent rounded-full opacity-10"></div>
               
               <h3 className="text-3xl font-bold text-white mb-8 font-heading relative z-10">Book an Appointment</h3>
+              
+              {/* Honeypot field for spam prevention */}
+              <input type="text" name="website" value={formData.website} onChange={handleInputChange} style={{ display: 'none' }} tabIndex={-1} autoComplete="off" />
               
               {status.type === 'success' && (
                 <div className="mb-6 p-4 rounded-xl bg-green-500/20 border border-green-500/50 text-green-100 relative z-10">

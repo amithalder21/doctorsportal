@@ -50,13 +50,30 @@ export async function POST(req: Request) {
 
     // 2. Parse and Validate Request Body
     const body = await req.json();
-    const { name, phone, email, date, time, message } = body;
+    const { name, phone, email, date, time, message, website } = body;
+
+    // Spam Trap / Honeypot
+    if (website) {
+      // Return a fake success response to bot
+      return NextResponse.json({ success: true }, { status: 201 });
+    }
 
     if (!name || !phone || !email || !date || !time) {
       return NextResponse.json(
         { error: 'Missing required fields.' },
         { status: 400 }
       );
+    }
+
+    // Strict Validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return NextResponse.json({ error: 'Invalid email address.' }, { status: 400 });
+    }
+
+    const phoneRegex = /^\+?[0-9\s\-]{10,15}$/;
+    if (!phoneRegex.test(phone)) {
+      return NextResponse.json({ error: 'Invalid phone number.' }, { status: 400 });
     }
 
     // 3. Save to PostgreSQL Database using Prisma
