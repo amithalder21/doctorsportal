@@ -55,11 +55,11 @@ export default function About() {
             </div>
             
             <p className="text-gray-600 text-lg leading-relaxed border-l-4 border-salute-secondary pl-6 italic">
-              With over 15 years of clinical experience in Obstetrics and Gynecology, I am committed to providing comprehensive, compassionate, and personalized care for women at every stage of life.
+              With over 15 years of extensive clinical experience in Obstetrics and Gynecology, I am deeply committed to providing comprehensive, compassionate, and highly personalized care for women at every stage of life.
             </p>
             
             <p className="text-gray-600 leading-relaxed">
-              My philosophy centers around listening to my patients, understanding their unique concerns, and working together to develop the most effective treatment plans. Whether you are navigating pregnancy, dealing with complex gynecological issues, or seeking routine care, you are in expert hands.
+              My practice is built on a foundation of trust, open communication, and evidence-based medicine. Whether you are navigating pregnancy, dealing with complex gynecological issues, or seeking routine preventive care, my goal is to ensure you feel heard, supported, and confident in your treatment plan.
             </p>
             
             <div className="pt-4">

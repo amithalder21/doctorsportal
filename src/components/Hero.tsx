@@ -21,11 +21,11 @@ export default function Hero() {
             Premier Clinical Care
           </div>
           <h1 className="text-5xl md:text-7xl font-bold text-salute-dark leading-tight font-heading">
-            Expert Care for <br />
-            <span className="text-salute-primary">Women & Children</span>
+            Empowering <br />
+            <span className="text-salute-primary">Women's Health</span>
           </h1>
           <p className="text-lg md:text-xl text-gray-600 max-w-lg leading-relaxed">
-            Providing compassionate, state-of-the-art healthcare tailored to your unique needs. Experience the highest standard of clinical excellence at Dr. Ankit Gaur's Clinic.
+            Providing compassionate, state-of-the-art gynecological and obstetric care tailored to your unique needs. Experience the highest standard of clinical excellence with Dr. Ankit Gaur.
           </p>
           <div className="pt-6 flex flex-wrap gap-4">
             <a href="#services" className="inline-block px-8 py-4 bg-salute-secondary hover:bg-[#ff7575] text-white rounded font-bold transition-all shadow-[0_10px_20px_-10px_rgba(255,141,141,0.5)] hover:shadow-[0_15px_25px_-10px_rgba(255,141,141,0.6)] hover:-translate-y-1 text-sm uppercase tracking-wide text-center">

@@ -5,42 +5,42 @@ import { motion } from 'framer-motion';
 const services = [
   {
     title: 'Obstetrics Care',
-    description: 'Comprehensive care throughout your pregnancy journey, from preconception counseling to postpartum support.',
+    description: 'Comprehensive, compassionate support throughout your entire pregnancy journey—from preconception planning to specialized postpartum care.',
     icon: (
       <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm14 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path></svg>
     )
   },
   {
     title: 'General Gynecology',
-    description: 'Routine check-ups, preventive screenings, and management of various gynecological conditions.',
+    description: 'Routine wellness check-ups, preventive screenings, and expert management of various gynecological conditions to keep you healthy.',
     icon: (
       <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
     )
   },
   {
     title: 'IVF & Infertility',
-    description: 'Advanced fertility treatments and compassionate support to help you build your family.',
+    description: 'Advanced fertility evaluations and personalized treatment pathways designed to support you in building your family.',
     icon: (
       <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
     )
   },
   {
     title: 'Minimally Invasive Surgery',
-    description: 'State-of-the-art surgical options for faster recovery and minimal discomfort.',
+    description: 'State-of-the-art laparoscopic and hysteroscopic surgical options ensuring faster recovery times and minimal discomfort.',
     icon: (
       <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path></svg>
     )
   },
   {
     title: 'PCOD/PCOS Management',
-    description: 'Holistic approaches to manage symptoms and improve your quality of life.',
+    description: 'Holistic, multi-disciplinary approaches to manage symptoms, balance hormones, and improve your daily quality of life.',
     icon: (
       <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
     )
   },
   {
     title: 'High-Risk Pregnancy',
-    description: 'Specialized monitoring and care for complex pregnancies to ensure the best outcomes.',
+    description: 'Vigilant, specialized monitoring and expert care for complex pregnancies, ensuring the safest possible outcomes for mother and baby.',
     icon: (
       <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
     )
