@@ -1,33 +1,52 @@
 import { PrismaClient } from '@prisma/client';
 import { cookies } from 'next/headers';
 import AdminActions from '@/components/AdminActions';
+import AdminDateFilter from './AdminDateFilter';
 
 export const dynamic = 'force-dynamic';
 
 const prisma = new PrismaClient();
 
-export default async function AdminDashboard() {
+export default async function AdminDashboard({ searchParams }: { searchParams: Promise<{ date?: string }> }) {
   const cookieStore = await cookies();
   const role = cookieStore.get('admin_role')?.value || null;
+  const params = await searchParams;
+
+  const whereClause: any = {};
+  
+  if (params.date) {
+    const startOfDay = new Date(params.date);
+    const endOfDay = new Date(params.date);
+    endOfDay.setDate(endOfDay.getDate() + 1);
+    
+    whereClause.date = {
+      gte: startOfDay,
+      lt: endOfDay
+    };
+  }
 
   const appointments = await prisma.appointment.findMany({
+    where: whereClause,
     orderBy: {
-      createdAt: 'desc',
+      date: 'asc', // Sort by date first since we might be filtering
     },
   });
 
   return (
     <div className="p-6 md:p-12">
       <div className="max-w-7xl mx-auto">
-        <div className="flex items-center justify-between mb-10">
+        <div className="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-4">
           <div>
             <h1 className="text-3xl font-bold text-salute-dark font-heading">Admin Dashboard</h1>
             <p className="text-gray-500 mt-1 flex items-center gap-2">
               Manage your appointment requests
             </p>
           </div>
-          <div className="text-sm font-bold text-salute-primary bg-salute-accent px-4 py-2 rounded-lg">
-            {appointments.length} Total Requests
+          <div className="flex flex-col sm:flex-row items-center gap-6">
+            <AdminDateFilter />
+            <div className="text-sm font-bold text-salute-primary bg-salute-accent px-4 py-2 rounded-lg whitespace-nowrap">
+              {appointments.length} {params.date ? 'Appointments' : 'Total Requests'}
+            </div>
           </div>
         </div>
 

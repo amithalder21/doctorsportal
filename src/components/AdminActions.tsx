@@ -80,7 +80,9 @@ export default function AdminActions({ id, initialStatus, userRole }: AdminActio
         >
           <option value="PENDING">PENDING</option>
           <option value="CONFIRMED">CONFIRMED</option>
-          <option value="COMPLETED">COMPLETED</option>
+          {userRole !== 'RECEPTION' && (
+            <option value="COMPLETED">COMPLETED</option>
+          )}
           <option value="CANCELLED">CANCELLED</option>
         </select>
       ) : (
