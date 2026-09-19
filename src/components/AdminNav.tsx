@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import LogoutButton from './LogoutButton';
 
 export default function AdminNav({ role }: { role: string | null }) {
   const pathname = usePathname();
@@ -49,6 +50,7 @@ export default function AdminNav({ role }: { role: string | null }) {
             <span className="bg-white/20 px-3 py-1 rounded-full text-xs font-bold tracking-wider uppercase">
               {role || 'Unknown'}
             </span>
+            <LogoutButton />
           </div>
         </div>
       </div>

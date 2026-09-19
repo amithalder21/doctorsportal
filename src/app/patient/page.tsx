@@ -3,6 +3,7 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import DocumentUploadButton from './DocumentUploadButton';
+import LogoutButton from '@/components/LogoutButton';
 
 export const dynamic = 'force-dynamic';
 const prisma = new PrismaClient();
@@ -66,6 +67,7 @@ export default async function PatientDashboard() {
             
             <div className="flex items-center gap-4">
               <span className="text-sm font-bold">Welcome, {patientName.split(' ')[0]}</span>
+              <LogoutButton />
             </div>
           </div>
         </div>
