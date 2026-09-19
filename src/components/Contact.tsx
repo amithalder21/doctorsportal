@@ -12,7 +12,8 @@ export default function Contact() {
   const [bookedSlots, setBookedSlots] = useState<string[]>([]);
   const [isLoadingSlots, setIsLoadingSlots] = useState(false);
   const [formData, setFormData] = useState({
-    name: '',
+    firstName: '',
+    lastName: '',
     phone: '',
     email: '',
     message: '',
@@ -75,7 +76,7 @@ export default function Contact() {
     // Spam trap: If a bot fills out the hidden honeypot field, silently reject
     if (formData.website) {
       setStatus({ type: 'success', message: 'Appointment request submitted successfully! We will contact you soon.' });
-      setFormData({ name: '', phone: '', email: '', message: '', website: '' });
+      setFormData({ firstName: '', lastName: '', phone: '', email: '', message: '', website: '' });
       return;
     }
 
@@ -126,10 +127,12 @@ export default function Contact() {
         documentUrl = uploadedUrls.join(',');
       }
 
+      const fullName = `${formData.firstName} ${formData.lastName}`.trim();
+
       const res = await fetch('/api/appointments', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...formData, date, time: timeSlot, documentUrl, doctorId }),
+        body: JSON.stringify({ ...formData, name: fullName, date, time: timeSlot, documentUrl, doctorId }),
       });
       
       const data = await res.json();
@@ -139,7 +142,7 @@ export default function Contact() {
       }
       
       setStatus({ type: 'success', message: 'Appointment request submitted successfully! We will contact you soon.' });
-      setFormData({ name: '', phone: '', email: '', message: '', website: '' });
+      setFormData({ firstName: '', lastName: '', phone: '', email: '', message: '', website: '' });
       setDate('');
       setTimeSlot('');
       if (fileInputRef.current) {
@@ -228,9 +231,15 @@ export default function Contact() {
               )}
 
               <div className="grid md:grid-cols-2 gap-6 mb-6 relative z-10">
-                <div className="space-y-2">
-                  <label className="text-sm font-bold text-white/80 uppercase tracking-wide">Full Name</label>
-                  <input required type="text" name="name" value={formData.name} onChange={handleInputChange} className="w-full px-5 py-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:ring-2 focus:ring-salute-secondary focus:border-transparent outline-none transition-all backdrop-blur-sm" placeholder="Jane Doe" />
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold text-white/80 uppercase tracking-wide">First Name</label>
+                    <input required type="text" name="firstName" value={formData.firstName} onChange={handleInputChange} className="w-full px-5 py-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:ring-2 focus:ring-salute-secondary focus:border-transparent outline-none transition-all backdrop-blur-sm" placeholder="Jane" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold text-white/80 uppercase tracking-wide">Last Name</label>
+                    <input required type="text" name="lastName" value={formData.lastName} onChange={handleInputChange} className="w-full px-5 py-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:ring-2 focus:ring-salute-secondary focus:border-transparent outline-none transition-all backdrop-blur-sm" placeholder="Doe" />
+                  </div>
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-bold text-white/80 uppercase tracking-wide">Phone Number</label>
