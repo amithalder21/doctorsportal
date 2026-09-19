@@ -12,8 +12,12 @@ export async function GET(req: Request) {
     const role = cookieStore.get('admin_role')?.value;
     const adminId = cookieStore.get('admin_id')?.value;
 
-    if (!role || !adminId) {
+    if (!role) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    if (role === 'DOCTOR' && !adminId) {
+      return NextResponse.json({ error: 'Unauthorized: Doctor ID missing' }, { status: 401 });
     }
 
     const { searchParams } = new URL(req.url);
@@ -49,8 +53,12 @@ export async function POST(req: Request) {
     const role = cookieStore.get('admin_role')?.value;
     const adminId = cookieStore.get('admin_id')?.value;
 
-    if (!role || !adminId || (role !== 'DOCTOR' && role !== 'SUPERADMIN' && role !== 'RECEPTION')) {
+    if (!role || (role !== 'DOCTOR' && role !== 'SUPERADMIN' && role !== 'RECEPTION')) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    if (role === 'DOCTOR' && !adminId) {
+      return NextResponse.json({ error: 'Unauthorized: Doctor ID missing' }, { status: 401 });
     }
 
     const { date, time, reason, doctorId } = await req.json();

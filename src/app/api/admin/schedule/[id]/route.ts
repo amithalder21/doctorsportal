@@ -10,8 +10,12 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
     const role = cookieStore.get('admin_role')?.value;
     const adminId = cookieStore.get('admin_id')?.value;
 
-    if (!role || !adminId || (role !== 'DOCTOR' && role !== 'SUPERADMIN' && role !== 'RECEPTION')) {
+    if (!role || (role !== 'DOCTOR' && role !== 'SUPERADMIN' && role !== 'RECEPTION')) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    if (role === 'DOCTOR' && !adminId) {
+      return NextResponse.json({ error: 'Unauthorized: Doctor ID missing' }, { status: 401 });
     }
 
     const resolvedParams = await params;
