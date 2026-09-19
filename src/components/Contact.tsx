@@ -90,21 +90,19 @@ export default function Contact() {
                 </div>
               </div>
 
-              {date && (
-                <div className="space-y-3 mb-6 relative z-10 animate-fade-in">
-                  <label className="text-sm font-bold text-white/80 uppercase tracking-wide">Available Times</label>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                    {timeSlots.map((time) => (
-                      <label key={time} className="cursor-pointer">
-                        <input type="radio" name="timeSlot" value={time} className="peer sr-only" required />
-                        <div className="text-center px-2 py-3 rounded-xl border border-white/20 text-white/80 peer-checked:bg-salute-secondary peer-checked:text-white peer-checked:border-salute-secondary hover:bg-white/10 transition-all text-sm font-bold">
-                          {time}
-                        </div>
-                      </label>
-                    ))}
-                  </div>
+              <div className="space-y-3 mb-6 relative z-10">
+                <label className="text-sm font-bold text-white/80 uppercase tracking-wide">Available Times</label>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  {timeSlots.map((time) => (
+                    <label key={time} className="cursor-pointer">
+                      <input type="radio" name="timeSlot" value={time} className="peer sr-only" required />
+                      <div className="text-center px-2 py-3 rounded-xl border border-white/20 text-white/80 peer-checked:bg-salute-secondary peer-checked:text-white peer-checked:border-salute-secondary hover:bg-white/10 transition-all text-sm font-bold">
+                        {time}
+                      </div>
+                    </label>
+                  ))}
                 </div>
-              )}
+              </div>
               
               <div className="space-y-2 mb-10 relative z-10">
                 <label className="text-sm font-bold text-white/80 uppercase tracking-wide">Message (Optional)</label>
