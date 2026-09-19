@@ -5,7 +5,17 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-const redis = Redis.fromEnv();
+const url = process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL;
+const token = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN;
+
+if (!url || !token) {
+  console.warn("Redis is not configured properly. Missing URL or Token.");
+}
+
+const redis = new Redis({
+  url: url || 'https://upstash.io',
+  token: token || 'dummy_token',
+});
 
 export async function POST(req: Request) {
   try {
