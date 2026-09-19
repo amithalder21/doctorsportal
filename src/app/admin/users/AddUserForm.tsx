@@ -6,7 +6,8 @@ import { useRouter } from 'next/navigation';
 export default function AddUserForm() {
   const router = useRouter();
   const [email, setEmail] = useState('');
-  const [name, setName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [role, setRole] = useState('PATIENT');
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
@@ -17,10 +18,11 @@ export default function AddUserForm() {
     setMessage('');
 
     try {
+      const fullName = [firstName.trim(), lastName.trim()].filter(Boolean).join(' ');
       const res = await fetch('/api/admin/users', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, role, name })
+        body: JSON.stringify({ email, role, name: fullName })
       });
 
       const data = await res.json();
@@ -29,7 +31,8 @@ export default function AddUserForm() {
 
       setMessage('User added successfully!');
       setEmail('');
-      setName('');
+      setFirstName('');
+      setLastName('');
       setRole('PATIENT');
       router.refresh();
     } catch (err: any) {
@@ -50,17 +53,31 @@ export default function AddUserForm() {
       )}
 
       <div className="space-y-5">
-        <div>
-          <label className="block text-sm font-bold text-gray-700 mb-1.5 uppercase tracking-wider text-xs">Name (Optional)</label>
-          <input 
-            type="text" 
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-salute-primary outline-none transition-all bg-gray-50 focus:bg-white"
-            placeholder="Dr. Ankit Gaur"
-            autoComplete="off"
-            data-lpignore="true"
-          />
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-bold text-gray-700 mb-1.5 uppercase tracking-wider text-xs">First Name (Optional)</label>
+            <input 
+              type="text" 
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-salute-primary outline-none transition-all bg-gray-50 focus:bg-white"
+              placeholder="Dr. Ankit"
+              autoComplete="off"
+              data-lpignore="true"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-bold text-gray-700 mb-1.5 uppercase tracking-wider text-xs">Last Name (Optional)</label>
+            <input 
+              type="text" 
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-salute-primary outline-none transition-all bg-gray-50 focus:bg-white"
+              placeholder="Gaur"
+              autoComplete="off"
+              data-lpignore="true"
+            />
+          </div>
         </div>
         
         <div>
