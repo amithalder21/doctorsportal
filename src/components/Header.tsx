@@ -14,8 +14,8 @@ export default function Header() {
         </Link>
         
         <nav className="hidden md:flex items-center gap-8">
-          <Link href="#about" className="text-gray-600 hover:text-salute-secondary font-medium transition-colors">Meet the Doctor</Link>
-          <Link href="#services" className="text-gray-600 hover:text-salute-secondary font-medium transition-colors">Specialties</Link>
+          <Link href="#about" className="text-gray-600 hover:text-salute-secondary font-medium transition-colors">Our Clinic</Link>
+          <Link href="#services" className="text-gray-600 hover:text-salute-secondary font-medium transition-colors">Clinic Services</Link>
           <Link href="/patient/login" className="text-salute-primary font-bold hover:text-salute-secondary transition-colors">Patient Portal</Link>
         </nav>
         

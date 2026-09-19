@@ -29,14 +29,14 @@ export default function Footer() {
         <div>
           <h4 className="text-lg font-bold mb-6 text-white uppercase tracking-wider font-heading">Quick Links</h4>
           <ul className="space-y-3">
-            <li><a href="#about" className="text-white/70 hover:text-salute-secondary transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-salute-secondary"></span>About</a></li>
-            <li><a href="#services" className="text-white/70 hover:text-salute-secondary transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-salute-secondary"></span>Services</a></li>
+            <li><a href="#about" className="text-white/70 hover:text-salute-secondary transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-salute-secondary"></span>Our Clinic</a></li>
+            <li><a href="#services" className="text-white/70 hover:text-salute-secondary transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-salute-secondary"></span>Clinic Services</a></li>
             <li><a href="#contact" className="text-white/70 hover:text-salute-secondary transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-salute-secondary"></span>Book Appointment</a></li>
             <li><Link href="/patient/login" className="text-white/70 hover:text-salute-secondary transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-salute-secondary"></span>Patient Portal</Link></li>
           </ul>
         </div>
         <div>
-          <h4 className="text-lg font-bold mb-6 text-white uppercase tracking-wider font-heading">Services</h4>
+          <h4 className="text-lg font-bold mb-6 text-white uppercase tracking-wider font-heading">Clinic Services</h4>
           <ul className="space-y-3">
             <li><a href="#" className="text-white/70 hover:text-salute-secondary transition-colors">Obstetrics Care</a></li>
             <li><a href="#" className="text-white/70 hover:text-salute-secondary transition-colors">Gynecology</a></li>

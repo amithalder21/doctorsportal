@@ -18,14 +18,14 @@ export default function Hero() {
           className="space-y-8 max-w-2xl"
         >
           <div className="inline-block px-4 py-2 bg-salute-accent text-salute-primary font-bold tracking-wider text-sm rounded-full uppercase mb-2">
-            Professional Medical Care
+            Premier Clinical Care
           </div>
           <h1 className="text-5xl md:text-7xl font-bold text-salute-dark leading-tight font-heading">
             Expert Care for <br />
             <span className="text-salute-primary">Women & Children</span>
           </h1>
           <p className="text-lg md:text-xl text-gray-600 max-w-lg leading-relaxed">
-            Providing compassionate, state-of-the-art healthcare tailored to your unique needs. Experience the highest standard of medical excellence with Dr. Ankit Gaur.
+            Providing compassionate, state-of-the-art healthcare tailored to your unique needs. Experience the highest standard of clinical excellence at Dr. Ankit Gaur's Clinic.
           </p>
           <div className="pt-6 flex flex-wrap gap-4">
             <a href="#contact" className="inline-block px-8 py-4 bg-salute-secondary hover:bg-[#ff7575] text-white rounded font-bold transition-all shadow-[0_10px_20px_-10px_rgba(255,141,141,0.5)] hover:shadow-[0_15px_25px_-10px_rgba(255,141,141,0.6)] hover:-translate-y-1 text-sm uppercase tracking-wide text-center">

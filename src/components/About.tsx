@@ -48,14 +48,14 @@ export default function About() {
             className="w-full md:w-1/2 space-y-8"
           >
             <div>
-              <h4 className="text-salute-secondary font-bold tracking-wider text-sm uppercase mb-3">About The Doctor</h4>
+              <h4 className="text-salute-secondary font-bold tracking-wider text-sm uppercase mb-3">About Our Clinic</h4>
               <h2 className="text-4xl md:text-5xl font-bold text-salute-dark leading-tight font-heading">
                 Dedicated to Your <br className="hidden md:block"/> Health & Well-being
               </h2>
             </div>
             
             <p className="text-gray-600 text-lg leading-relaxed border-l-4 border-salute-secondary pl-6 italic">
-              With over 15 years of experience in Obstetrics and Gynecology, I am committed to providing comprehensive, compassionate, and personalized care for women at every stage of life.
+              With over 15 years of clinical experience in Obstetrics and Gynecology, I am committed to providing comprehensive, compassionate, and personalized care for women at every stage of life.
             </p>
             
             <p className="text-gray-600 leading-relaxed">

@@ -73,7 +73,7 @@ export default function Services() {
           transition={{ duration: 0.6 }}
           className="text-center max-w-2xl mx-auto mb-20"
         >
-          <h4 className="text-salute-primary font-bold tracking-wider uppercase text-sm mb-3">Our Services</h4>
+          <h4 className="text-salute-primary font-bold tracking-wider uppercase text-sm mb-3">Clinic Services</h4>
           <h2 className="text-4xl md:text-5xl font-bold text-salute-dark mt-2 mb-6 font-heading">Comprehensive Care</h2>
           <p className="text-gray-600 text-lg">
             We offer a wide range of specialized services tailored to meet the unique healthcare needs of women at every stage of life.
