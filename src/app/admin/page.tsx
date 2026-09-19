@@ -146,6 +146,7 @@ export default async function AdminDashboard({ searchParams }: { searchParams: P
                           id={apt.id} 
                           initialStatus={apt.status} 
                           userRole={role} 
+                          appointmentDate={apt.date.toISOString()}
                         />
                       </td>
                     </tr>

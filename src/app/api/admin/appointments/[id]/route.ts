@@ -31,6 +31,9 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
     const { id } = await params;
     const { status, paymentStatus, transactionId } = await request.json();
     
+    const existingAppt = await prisma.appointment.findUnique({ where: { id } });
+    if (!existingAppt) return new NextResponse('Appointment not found', { status: 404 });
+
     // We can update either status, or payment info, or both
     const updateData: any = {};
     
@@ -38,6 +41,17 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
       if (!['PENDING', 'CONFIRMED', 'COMPLETED', 'CANCELLED'].includes(status)) {
         return new NextResponse('Invalid status', { status: 400 });
       }
+
+      if (status === 'COMPLETED') {
+        const todayUTC = new Date();
+        todayUTC.setUTCHours(0, 0, 0, 0);
+        const aptDate = new Date(existingAppt.date);
+        
+        if (aptDate.getTime() > todayUTC.getTime()) {
+           return new NextResponse('Cannot mark future appointments as COMPLETED', { status: 400 });
+        }
+      }
+
       updateData.status = status;
     }
 

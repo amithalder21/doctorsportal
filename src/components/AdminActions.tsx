@@ -7,15 +7,21 @@ interface AdminActionsProps {
   id: string;
   initialStatus: string;
   userRole: string | null;
+  appointmentDate: string; // ISO string
 }
 
-export default function AdminActions({ id, initialStatus, userRole }: AdminActionsProps) {
+export default function AdminActions({ id, initialStatus, userRole, appointmentDate }: AdminActionsProps) {
   const router = useRouter();
   const [status, setStatus] = useState(initialStatus);
   const [isUpdating, setIsUpdating] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
   const isTerminalState = initialStatus === 'COMPLETED' || initialStatus === 'CANCELLED';
+  
+  const todayUTC = new Date();
+  todayUTC.setUTCHours(0, 0, 0, 0);
+  const aptDate = new Date(appointmentDate);
+  const isFutureAppointment = aptDate.getTime() > todayUTC.getTime();
   
   // SUPERADMIN has full rights. DOCTOR and RECEPTION can only edit non-terminal states
   const canEdit = userRole === 'SUPERADMIN' || (['DOCTOR', 'RECEPTION'].includes(userRole || '') && !isTerminalState);
@@ -83,7 +89,7 @@ export default function AdminActions({ id, initialStatus, userRole }: AdminActio
         >
           <option value="PENDING">PENDING</option>
           <option value="CONFIRMED">CONFIRMED</option>
-          {userRole !== 'RECEPTION' && (
+          {userRole !== 'RECEPTION' && (!isFutureAppointment || status === 'COMPLETED') && (
             <option value="COMPLETED">COMPLETED</option>
           )}
           <option value="CANCELLED">CANCELLED</option>
