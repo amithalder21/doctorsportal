@@ -18,12 +18,12 @@ export default function Hero() {
             Providing compassionate, state-of-the-art healthcare tailored to your unique needs. Experience the highest standard of medical excellence with Dr. Swati Sinha.
           </p>
           <div className="pt-6 flex flex-wrap gap-4">
-            <button className="px-8 py-4 bg-salute-secondary hover:bg-[#ff7575] text-white rounded font-bold transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 text-sm uppercase tracking-wide">
+            <a href="#contact" className="inline-block px-8 py-4 bg-salute-secondary hover:bg-[#ff7575] text-white rounded font-bold transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 text-sm uppercase tracking-wide text-center">
               Book Appointment
-            </button>
-            <button className="px-8 py-4 bg-white hover:bg-salute-light text-salute-primary border-2 border-salute-primary/10 rounded font-bold transition-all shadow-sm text-sm uppercase tracking-wide">
+            </a>
+            <a href="#services" className="inline-block px-8 py-4 bg-white hover:bg-salute-light text-salute-primary border-2 border-salute-primary/10 rounded font-bold transition-all shadow-sm text-sm uppercase tracking-wide text-center">
               Our Services
-            </button>
+            </a>
           </div>
         </div>
         

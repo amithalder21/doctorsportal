@@ -1,4 +1,22 @@
+"use client";
+
+import { useState } from 'react';
+
 export default function Contact() {
+  const [date, setDate] = useState('');
+  
+  const timeSlots = [
+    "09:00 AM", "09:30 AM", "10:00 AM", "10:30 AM",
+    "11:00 AM", "11:30 AM", "12:00 PM", "12:30 PM",
+    "02:00 PM", "02:30 PM", "03:00 PM", "03:30 PM",
+    "04:00 PM", "04:30 PM", "05:00 PM", "05:30 PM"
+  ];
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    alert("Appointment request submitted successfully!");
+  };
+
   return (
     <section className="py-24 bg-white" id="contact">
       <div className="container mx-auto px-6">
@@ -44,7 +62,7 @@ export default function Contact() {
           </div>
           
           <div className="w-full lg:w-2/3">
-            <form className="bg-salute-primary p-10 md:p-14 rounded-[40px] shadow-2xl relative overflow-hidden">
+            <form onSubmit={handleSubmit} className="bg-salute-primary p-10 md:p-14 rounded-[40px] shadow-2xl relative overflow-hidden">
               {/* Decorative circle in form */}
               <div className="absolute -top-24 -right-24 w-64 h-64 bg-salute-accent rounded-full opacity-10"></div>
               
@@ -53,24 +71,40 @@ export default function Contact() {
               <div className="grid md:grid-cols-2 gap-6 mb-6 relative z-10">
                 <div className="space-y-2">
                   <label className="text-sm font-bold text-white/80 uppercase tracking-wide">Full Name</label>
-                  <input type="text" className="w-full px-5 py-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:ring-2 focus:ring-salute-secondary focus:border-transparent outline-none transition-all backdrop-blur-sm" placeholder="Jane Doe" />
+                  <input required type="text" className="w-full px-5 py-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:ring-2 focus:ring-salute-secondary focus:border-transparent outline-none transition-all backdrop-blur-sm" placeholder="Jane Doe" />
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-bold text-white/80 uppercase tracking-wide">Phone Number</label>
-                  <input type="tel" className="w-full px-5 py-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:ring-2 focus:ring-salute-secondary focus:border-transparent outline-none transition-all backdrop-blur-sm" placeholder="+91 00000 00000" />
+                  <input required type="tel" className="w-full px-5 py-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:ring-2 focus:ring-salute-secondary focus:border-transparent outline-none transition-all backdrop-blur-sm" placeholder="+91 00000 00000" />
                 </div>
               </div>
               
               <div className="grid md:grid-cols-2 gap-6 mb-6 relative z-10">
                 <div className="space-y-2">
                   <label className="text-sm font-bold text-white/80 uppercase tracking-wide">Email Address</label>
-                  <input type="email" className="w-full px-5 py-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:ring-2 focus:ring-salute-secondary focus:border-transparent outline-none transition-all backdrop-blur-sm" placeholder="jane@example.com" />
+                  <input required type="email" className="w-full px-5 py-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:ring-2 focus:ring-salute-secondary focus:border-transparent outline-none transition-all backdrop-blur-sm" placeholder="jane@example.com" />
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-bold text-white/80 uppercase tracking-wide">Preferred Date</label>
-                  <input type="date" className="w-full px-5 py-4 rounded-xl bg-white/10 border border-white/20 text-white focus:ring-2 focus:ring-salute-secondary focus:border-transparent outline-none transition-all backdrop-blur-sm" style={{colorScheme: 'dark'}} />
+                  <input required type="date" value={date} onChange={(e) => setDate(e.target.value)} className="w-full px-5 py-4 rounded-xl bg-white/10 border border-white/20 text-white focus:ring-2 focus:ring-salute-secondary focus:border-transparent outline-none transition-all backdrop-blur-sm" style={{colorScheme: 'dark'}} />
                 </div>
               </div>
+
+              {date && (
+                <div className="space-y-3 mb-6 relative z-10 animate-fade-in">
+                  <label className="text-sm font-bold text-white/80 uppercase tracking-wide">Available Times</label>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    {timeSlots.map((time) => (
+                      <label key={time} className="cursor-pointer">
+                        <input type="radio" name="timeSlot" value={time} className="peer sr-only" required />
+                        <div className="text-center px-2 py-3 rounded-xl border border-white/20 text-white/80 peer-checked:bg-salute-secondary peer-checked:text-white peer-checked:border-salute-secondary hover:bg-white/10 transition-all text-sm font-bold">
+                          {time}
+                        </div>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              )}
               
               <div className="space-y-2 mb-10 relative z-10">
                 <label className="text-sm font-bold text-white/80 uppercase tracking-wide">Message (Optional)</label>
