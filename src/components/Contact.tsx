@@ -64,9 +64,10 @@ export default function Contact() {
       // Handle File Upload if a file is selected
       if (fileInputRef.current?.files && fileInputRef.current.files.length > 0) {
         const file = fileInputRef.current.files[0];
+        const sanitizedName = file.name.replace(/[^a-zA-Z0-9.\-]/g, '_');
         
         // Upload the file to Vercel Blob
-        const blob = await upload(file.name, file, {
+        const blob = await upload(sanitizedName, file, {
           access: 'public',
           handleUploadUrl: '/api/upload',
         });

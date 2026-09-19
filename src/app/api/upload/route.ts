@@ -13,9 +13,7 @@ export async function POST(request: Request): Promise<NextResponse> {
         // For public appointment uploads, we can just return a true-like response.
         return {
           allowedContentTypes: ['image/jpeg', 'image/png', 'application/pdf'],
-          tokenPayload: JSON.stringify({
-            // Optional: attach data to the upload token
-          }),
+          maximumSizeInBytes: 10 * 1024 * 1024, // 10MB
         };
       },
       onUploadCompleted: async ({ blob, tokenPayload }) => {
