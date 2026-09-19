@@ -6,7 +6,7 @@ export async function GET(request: Request) {
   const cookieStore = await cookies();
   const role = cookieStore.get('admin_role')?.value;
   
-  if (!role || (role !== 'SUPERADMIN' && role !== 'ADMIN' && role !== 'READER')) {
+  if (!role || (role !== 'SUPERADMIN' && role !== 'DOCTOR')) {
     return new NextResponse('Unauthorized', { status: 401 });
   }
 
