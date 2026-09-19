@@ -68,7 +68,7 @@ export default function Contact() {
         
         // Upload the file to Vercel Blob
         const blob = await upload(sanitizedName, file, {
-          access: 'public',
+          access: 'private',
           handleUploadUrl: '/api/upload',
         });
         
