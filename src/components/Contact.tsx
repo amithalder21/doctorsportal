@@ -1,12 +1,14 @@
 "use client";
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { upload } from '@vercel/blob/client';
 import { motion } from 'framer-motion';
 
 export default function Contact() {
   const [date, setDate] = useState('');
   const [timeSlot, setTimeSlot] = useState('');
+  const [bookedSlots, setBookedSlots] = useState<string[]>([]);
+  const [isLoadingSlots, setIsLoadingSlots] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -27,6 +29,34 @@ export default function Contact() {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
+  useEffect(() => {
+    if (!date) {
+      setBookedSlots([]);
+      return;
+    }
+
+    const fetchBookedSlots = async () => {
+      setIsLoadingSlots(true);
+      try {
+        const res = await fetch(`/api/appointments/slots?date=${date}`);
+        const data = await res.json();
+        if (res.ok) {
+          setBookedSlots(data.bookedSlots || []);
+          // If the currently selected time slot is now booked, unselect it
+          if (timeSlot && data.bookedSlots?.includes(timeSlot)) {
+            setTimeSlot('');
+          }
+        }
+      } catch (err) {
+        console.error('Failed to fetch booked slots', err);
+      } finally {
+        setIsLoadingSlots(false);
+      }
+    };
+
+    fetchBookedSlots();
+  }, [date, timeSlot]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -201,16 +231,44 @@ export default function Contact() {
 
               <div className="space-y-3 mb-6 relative z-10">
                 <label className="text-sm font-bold text-white/80 uppercase tracking-wide">Available Times</label>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                  {timeSlots.map((time) => (
-                    <label key={time} className="cursor-pointer">
-                      <input type="radio" name="timeSlot" value={time} checked={timeSlot === time} onChange={() => setTimeSlot(time)} className="peer sr-only" required />
-                      <div className="text-center px-2 py-3 rounded-xl border border-white/20 text-white/80 peer-checked:bg-salute-secondary peer-checked:text-white peer-checked:border-salute-secondary hover:bg-white/20 hover:text-white transition-all text-sm font-bold">
-                        {time}
-                      </div>
-                    </label>
-                  ))}
-                </div>
+                {!date ? (
+                  <div className="p-4 rounded-xl border border-dashed border-white/30 text-center text-white/70 text-sm font-medium">
+                    Please select a date first to view available slots.
+                  </div>
+                ) : isLoadingSlots ? (
+                  <div className="p-4 rounded-xl border border-white/20 bg-white/5 text-center text-white/70 text-sm font-medium flex items-center justify-center gap-2">
+                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                    Checking availability...
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    {timeSlots.map((time) => {
+                      const isBooked = bookedSlots.includes(time);
+                      return (
+                        <label key={time} className={isBooked ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}>
+                          <input 
+                            type="radio" 
+                            name="timeSlot" 
+                            value={time} 
+                            checked={timeSlot === time} 
+                            onChange={() => !isBooked && setTimeSlot(time)} 
+                            className="peer sr-only" 
+                            required 
+                            disabled={isBooked}
+                          />
+                          <div className={`text-center px-2 py-3 rounded-xl border text-sm font-bold transition-all
+                            ${isBooked 
+                              ? 'border-red-500/30 bg-red-500/10 text-red-200 line-through' 
+                              : 'border-white/20 text-white/80 peer-checked:bg-salute-secondary peer-checked:text-white peer-checked:border-salute-secondary hover:bg-white/20 hover:text-white'
+                            }`}
+                          >
+                            {time}
+                          </div>
+                        </label>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
               
               <div className="space-y-2 mb-6 relative z-10">
