@@ -28,8 +28,8 @@ export default function Hero() {
             Providing compassionate, state-of-the-art healthcare tailored to your unique needs. Experience the highest standard of clinical excellence at Dr. Ankit Gaur's Clinic.
           </p>
           <div className="pt-6 flex flex-wrap gap-4">
-            <a href="#contact" className="inline-block px-8 py-4 bg-salute-secondary hover:bg-[#ff7575] text-white rounded font-bold transition-all shadow-[0_10px_20px_-10px_rgba(255,141,141,0.5)] hover:shadow-[0_15px_25px_-10px_rgba(255,141,141,0.6)] hover:-translate-y-1 text-sm uppercase tracking-wide text-center">
-              Book Appointment
+            <a href="#services" className="inline-block px-8 py-4 bg-salute-secondary hover:bg-[#ff7575] text-white rounded font-bold transition-all shadow-[0_10px_20px_-10px_rgba(255,141,141,0.5)] hover:shadow-[0_15px_25px_-10px_rgba(255,141,141,0.6)] hover:-translate-y-1 text-sm uppercase tracking-wide text-center">
+              Explore Services
             </a>
           </div>
         </motion.div>
