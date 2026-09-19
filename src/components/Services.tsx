@@ -77,9 +77,7 @@ export default function Services() {
         </div>
         
         <div className="mt-20 text-center">
-          <button className="px-10 py-4 bg-salute-primary hover:bg-salute-dark text-white rounded font-bold transition-all shadow-lg text-sm uppercase tracking-wide">
-            View All Services
-          </button>
+          {/* Button removed to reduce clutter */}
         </div>
       </div>
     </section>

@@ -38,9 +38,7 @@ export default function About() {
             </p>
             
             <div className="pt-4">
-              <button className="px-8 py-4 bg-salute-dark hover:bg-salute-primary text-white rounded font-bold transition-all shadow-lg text-sm uppercase tracking-wide">
-                Read Full Profile
-              </button>
+              {/* Button removed to reduce clutter */}
             </div>
           </div>
         </div>

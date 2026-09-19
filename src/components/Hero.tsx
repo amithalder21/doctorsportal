@@ -21,9 +21,6 @@ export default function Hero() {
             <a href="#contact" className="inline-block px-8 py-4 bg-salute-secondary hover:bg-[#ff7575] text-white rounded font-bold transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 text-sm uppercase tracking-wide text-center">
               Book Appointment
             </a>
-            <a href="#services" className="inline-block px-8 py-4 bg-white hover:bg-salute-light text-salute-primary border-2 border-salute-primary/10 rounded font-bold transition-all shadow-sm text-sm uppercase tracking-wide text-center">
-              Our Services
-            </a>
           </div>
         </div>
         
