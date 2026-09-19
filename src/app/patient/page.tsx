@@ -86,7 +86,14 @@ export default async function PatientDashboard() {
                 {patientName.charAt(0).toUpperCase()}
               </div>
               <div className="flex-grow">
-                <h2 className="text-2xl font-bold text-salute-dark font-heading">{patientName}</h2>
+                <div className="flex items-center gap-3">
+                  <h2 className="text-2xl font-bold text-salute-dark font-heading">{patientName}</h2>
+                  {user.id.startsWith('UIQ-') && (
+                    <span className="text-[10px] font-mono bg-salute-light text-salute-primary px-2 py-1 rounded-md font-bold">
+                      ID: {user.id}
+                    </span>
+                  )}
+                </div>
                 <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-6 text-sm text-gray-500 mt-2">
                   <span className="flex items-center gap-1.5 font-medium">
                     <svg className="w-4 h-4 text-salute-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
@@ -130,7 +137,7 @@ export default async function PatientDashboard() {
             ) : (
               <div className="divide-y divide-gray-100">
                 {appointments.map((apt) => (
-                  <div key={apt.id} className="p-6 md:p-8 flex flex-col md:flex-row gap-6 md:items-center hover:bg-gray-50/50 transition-colors">
+                  <div key={apt.id} className="p-6 md:p-8 flex flex-col md:flex-row gap-6 md:items-center hover:bg-gray-50/50 transition-colors relative">
                     <div className="flex-shrink-0 w-24 h-24 bg-salute-light rounded-2xl flex flex-col items-center justify-center border border-salute-primary/10">
                       <span className="text-sm font-bold text-salute-primary uppercase tracking-widest">
                         {new Date(apt.date).toLocaleDateString('en-US', { month: 'short' })}
@@ -141,7 +148,7 @@ export default async function PatientDashboard() {
                     </div>
                     
                     <div className="flex-grow space-y-2">
-                      <div className="flex items-center gap-3">
+                      <div className="flex flex-wrap items-center gap-3">
                         <h3 className="text-xl font-bold text-salute-dark">{apt.time}</h3>
                         <span className={`px-3 py-1 rounded-full text-xs font-bold ${getStatusColor(apt.status)}`}>
                           {apt.status}
@@ -153,6 +160,11 @@ export default async function PatientDashboard() {
                         }`}>
                           {apt.paymentStatus}
                         </span>
+                        {apt.id.startsWith('UIQ-') && (
+                          <span className="text-[10px] font-mono text-gray-400 border border-gray-200 bg-gray-50 px-2 py-0.5 rounded ml-auto">
+                            Ref: {apt.id}
+                          </span>
+                        )}
                       </div>
                       
                       <p className="text-gray-600">
