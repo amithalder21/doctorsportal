@@ -56,10 +56,11 @@ export async function POST(req: Request) {
     await redis.set(`patient_otp_${email.toLowerCase()}`, otp, 'EX', 300);
 
     // Send the email via Nodemailer
+    const { getOtpEmail } = await import('@/lib/email-templates');
     await sendEmail({
       to: user.email,
       subject: 'Your Patient Portal Login OTP',
-      html: `<p>Your one-time password to log into the Patient Portal is: <strong>${otp}</strong></p><p>This code will expire in 5 minutes.</p>`,
+      html: getOtpEmail(otp, 'Patient'),
     });
 
     return NextResponse.json({ success: true, message: 'OTP sent successfully.' });

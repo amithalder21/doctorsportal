@@ -81,9 +81,11 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
         ? 'Your Appointment is Confirmed' 
         : 'Your Appointment has been Cancelled';
       
+      const { getAppointmentConfirmedEmail, getAppointmentCancelledEmail } = await import('@/lib/email-templates');
+      
       const htmlContent = status === 'CONFIRMED'
-        ? `<p>Hello ${updated.name},</p><p>Your appointment for <strong>${new Date(updated.date).toLocaleDateString()}</strong> at <strong>${updated.time}</strong> has been confirmed.</p><p>Thank you!</p>`
-        : `<p>Hello ${updated.name},</p><p>Unfortunately, your appointment for <strong>${new Date(updated.date).toLocaleDateString()}</strong> at <strong>${updated.time}</strong> has been cancelled.</p><p>Please contact us if you have any questions.</p>`;
+        ? getAppointmentConfirmedEmail(updated.name, new Date(updated.date).toLocaleDateString(), updated.time)
+        : getAppointmentCancelledEmail(updated.name, new Date(updated.date).toLocaleDateString(), updated.time);
 
       try {
         await sendEmail({
