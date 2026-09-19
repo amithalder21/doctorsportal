@@ -90,13 +90,27 @@ export default async function AdminDashboard({ searchParams }: { searchParams: P
                   appointments.map((apt) => (
                     <tr key={apt.id} className="hover:bg-gray-50/50 transition-colors">
                       <td className="p-5">
-                        <div className="flex items-center gap-2">
-                          <p className="font-bold text-salute-dark">{apt.name}</p>
-                          <span className="text-[10px] font-mono bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded">
-                            {apt.id.startsWith('UIQ-') ? apt.id : `#${apt.id.slice(-6)}`}
-                          </span>
+                        <div className="flex flex-col gap-1">
+                          <p className="font-bold text-salute-dark text-base">{apt.name}</p>
+                          
+                          {apt.id.startsWith('UIQ-') ? (
+                            <div className="flex flex-col gap-0.5">
+                              <span className="text-[10px] font-mono text-gray-500">
+                                <span className="font-semibold text-gray-400 mr-1">PATIENT ID:</span>
+                                {apt.userId}
+                              </span>
+                              <span className="text-[10px] font-mono text-gray-500">
+                                <span className="font-semibold text-gray-400 mr-1">APPT ID:</span>
+                                {apt.id}
+                              </span>
+                            </div>
+                          ) : (
+                            <span className="text-[10px] font-mono bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded w-max">
+                              #{apt.id.slice(-6)}
+                            </span>
+                          )}
                         </div>
-                        <p className="text-xs text-gray-400 mt-1">{new Date(apt.createdAt).toLocaleString()}</p>
+                        <p className="text-xs text-gray-400 mt-2">{new Date(apt.createdAt).toLocaleString()}</p>
                       </td>
                       <td className="p-5 space-y-2">
                         <a href={`tel:${apt.phone.replace(/\s+/g, '')}`} className="flex items-center gap-1.5 text-sm font-medium text-salute-primary hover:text-[#ff7575] transition-colors">
