@@ -1,35 +1,21 @@
 import { NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
-import Redis from 'ioredis';
 import crypto from 'crypto';
+import { checkRateLimit } from '@/lib/rate-limit';
 
 // Initialize Prisma
 const prisma = new PrismaClient();
 
-// Connect to Redis using the REDIS_URL environment variable
-const redisUrl = process.env.REDIS_URL;
-if (!redisUrl) {
-  console.warn("Redis URL is not configured properly in REDIS_URL.");
-}
-const redis = new Redis(redisUrl || '');
-
 export async function POST(req: Request) {
   try {
-    // 1. Rate Limiting using ioredis directly
+    // 1. Rate Limiting to prevent appointment spam
     const ip = req.headers.get('x-forwarded-for') ?? 'anonymous';
-    const rateLimitKey = `ratelimit_appointment_${ip}`;
+    // 2 requests per hour (3600 seconds)
+    const rateLimit = await checkRateLimit(`appointment_${ip}`, 2, 3600);
     
-    // Increment the number of requests for this IP
-    const requests = await redis.incr(rateLimitKey);
-    
-    // If it's the first request, set the expiration to 1 hour (3600 seconds)
-    if (requests === 1) {
-      await redis.expire(rateLimitKey, 3600);
-    }
-
-    if (requests > 3) {
+    if (!rateLimit.success) {
       return NextResponse.json(
-        { error: 'Too many requests. Please try again later.' },
+        { error: 'Too many appointment requests. Please wait an hour before trying again.' },
         { status: 429 }
       );
     }

@@ -3,6 +3,8 @@ import Redis from 'ioredis';
 import { PrismaClient } from '@prisma/client';
 import { sendEmail } from '@/lib/email';
 
+import { checkRateLimit } from '@/lib/rate-limit';
+
 const prisma = new PrismaClient();
 
 const redisUrl = process.env.REDIS_URL;
@@ -15,17 +17,12 @@ export async function POST(req: Request) {
   try {
     // 1. Rate Limiting to prevent OTP spam (Noisy Neighbor protection)
     const ip = req.headers.get('x-forwarded-for') ?? 'anonymous';
-    const rateLimitKey = `ratelimit_patient_otp_${ip}`;
-    const requests = await redis.incr(rateLimitKey);
+    // 3 requests per 10 minutes (600 seconds)
+    const rateLimit = await checkRateLimit(`patient_otp_${ip}`, 3, 600);
     
-    // Set expiration to 15 minutes (900 seconds)
-    if (requests === 1) {
-      await redis.expire(rateLimitKey, 900);
-    }
-
-    if (requests > 5) {
+    if (!rateLimit.success) {
       return NextResponse.json(
-        { error: 'Too many OTP requests. Please wait 15 minutes before trying again.' },
+        { error: 'Too many OTP requests. Please wait 10 minutes before trying again.' },
         { status: 429 }
       );
     }
