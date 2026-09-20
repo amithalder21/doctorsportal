@@ -49,7 +49,7 @@ export default function DocumentUploadButton({ appointmentId }: { appointmentId:
   };
 
   return (
-    <div>
+    <div className="w-full sm:w-auto">
       <input 
         type="file" 
         ref={fileInputRef} 
@@ -61,7 +61,7 @@ export default function DocumentUploadButton({ appointmentId }: { appointmentId:
       <button 
         onClick={() => fileInputRef.current?.click()}
         disabled={isUploading}
-        className="inline-flex items-center gap-2 text-salute-primary hover:text-salute-dark font-bold text-sm bg-salute-primary/10 px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
+        className="w-full sm:w-auto justify-center inline-flex items-center gap-2 text-salute-primary hover:text-salute-dark font-bold text-sm bg-salute-primary/10 px-4 py-2 rounded-xl transition-colors disabled:opacity-50"
       >
         {isUploading ? (
           <>
