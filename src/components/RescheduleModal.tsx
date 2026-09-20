@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { TIME_SLOTS } from '@/lib/constants';
 
 interface RescheduleModalProps {
@@ -76,7 +77,7 @@ export default function RescheduleModal({ appointmentId, doctorId, endpointUrl, 
     }
   };
 
-  return (
+  const modalContent = (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-salute-dark/50 backdrop-blur-sm">
       <div className="bg-white rounded-[24px] shadow-2xl w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh]">
         <div className="p-6 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
@@ -178,4 +179,8 @@ export default function RescheduleModal({ appointmentId, doctorId, endpointUrl, 
       </div>
     </div>
   );
+
+  return typeof document !== 'undefined' 
+    ? createPortal(modalContent, document.body) 
+    : null;
 }

@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import DocumentUploadButton from './DocumentUploadButton';
 import PatientCancelButton from './PatientCancelButton';
-import PatientRescheduleButton from './PatientRescheduleButton';
 import LogoutButton from '@/components/LogoutButton';
 
 export default function PatientDashboardClient({ user, patientName, patientPhone }: any) {
@@ -207,7 +206,6 @@ export default function PatientDashboardClient({ user, patientName, patientPhone
                   <div className="flex-shrink-0 flex flex-col items-center md:items-end gap-3 relative z-10 w-full md:w-auto mt-4 md:mt-0 pt-4 md:pt-0 border-t md:border-t-0 border-gray-100">
                     <DocumentUploadButton appointmentId={apt.id} />
                     <div className="flex flex-col sm:flex-row md:flex-col lg:flex-row items-center justify-end gap-3 w-full md:w-auto">
-                      <PatientRescheduleButton appointmentId={apt.id} doctorId={apt.doctorId} status={apt.status} />
                       <PatientCancelButton appointmentId={apt.id} status={apt.status} />
                     </div>
                   </div>
