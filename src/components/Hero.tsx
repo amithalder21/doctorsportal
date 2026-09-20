@@ -33,7 +33,7 @@ export default function Hero() {
             <span className="text-salute-primary">Women&apos;s Health</span>
           </h1>
           <p className="text-lg md:text-xl text-gray-600 max-w-lg leading-relaxed">
-            Providing compassionate, state-of-the-art gynecological and obstetric care tailored to your unique needs. Experience the highest standard of clinical excellence with Dr. Ankit Gaur.
+            Providing compassionate, state-of-the-art gynecological and obstetric care tailored to your unique needs. Experience the highest standard of clinical excellence with Dr. Priya Sharma.
           </p>
           <div className="pt-6 flex flex-wrap gap-4">
             <motion.a 
@@ -59,7 +59,7 @@ export default function Hero() {
           <div className="absolute inset-0 bg-white rounded-tr-[100px] rounded-bl-[100px] shadow-2xl overflow-hidden flex items-end justify-center border-4 border-white">
              <Image 
                src="/doctor_hero.jpg" 
-               alt="Dr. Ankit Gaur" 
+               alt="Dr. Priya Sharma" 
                fill 
                className="object-cover object-top"
                priority

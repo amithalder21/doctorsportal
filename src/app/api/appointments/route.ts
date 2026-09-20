@@ -226,7 +226,7 @@ async function generatePatientId(prisma: PrismaClient) {
 
       await sendEmail({
         to: email,
-        subject: 'Appointment Request Received - Ankit Gaur Clinic',
+        subject: 'Appointment Request Received - Priya Sharma Clinic',
         html: htmlContent,
       });
     } catch (emailError) {

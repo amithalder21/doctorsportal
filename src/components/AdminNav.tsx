@@ -22,7 +22,7 @@ export default function AdminNav({ role, name }: { role: string | null, name?: s
                 </svg>
               </div>
               <div className="flex flex-col">
-                <span className="font-bold text-2xl text-white font-heading leading-none">Ankit Gaur Clinic</span>
+                <span className="font-bold text-2xl text-white font-heading leading-none">Priya Sharma Clinic</span>
                 <span className="text-[10px] uppercase tracking-widest text-white/70 font-bold mt-1">Admin Portal</span>
               </div>
             </Link>

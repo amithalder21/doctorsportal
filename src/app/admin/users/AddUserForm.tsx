@@ -61,7 +61,7 @@ export default function AddUserForm() {
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
               className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-salute-primary outline-none transition-all bg-gray-50 focus:bg-white"
-              placeholder="Dr. Ankit"
+              placeholder="Dr. Priya"
               autoComplete="off"
               data-lpignore="true"
             />

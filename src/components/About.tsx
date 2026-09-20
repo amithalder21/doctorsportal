@@ -22,7 +22,7 @@ export default function About() {
             <div className="relative z-10 bg-salute-light aspect-[4/5] rounded-tl-[100px] rounded-br-[100px] overflow-hidden shadow-2xl flex flex-col items-center justify-center text-gray-400 border-8 border-white">
               <Image 
                 src="/doctor_about.jpg"
-                alt="Dr. Ankit Gaur in Clinic"
+                alt="Dr. Priya Sharma in Clinic"
                 fill
                 className="object-cover"
               />

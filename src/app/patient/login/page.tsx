@@ -76,7 +76,7 @@ export default function PatientLogin() {
               </svg>
             </div>
             <div className="flex flex-col items-start">
-              <span className="font-bold text-xl font-heading leading-none">Dr. Ankit Gaur</span>
+              <span className="font-bold text-xl font-heading leading-none">Dr. Priya Sharma</span>
               <span className="text-[10px] uppercase tracking-widest text-white/70 font-bold mt-1">Patient Portal</span>
             </div>
           </Link>

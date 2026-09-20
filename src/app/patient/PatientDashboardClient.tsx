@@ -52,7 +52,7 @@ export default function PatientDashboardClient({ user, patientName, patientPhone
                 </svg>
               </div>
               <div className="flex flex-col">
-                <span className="font-bold text-2xl text-salute-primary font-heading leading-none">Ankit Gaur Clinic</span>
+                <span className="font-bold text-2xl text-salute-primary font-heading leading-none">Priya Sharma Clinic</span>
                 <span className="text-[10px] uppercase tracking-widest text-salute-secondary font-bold mt-1">Patient Portal</span>
               </div>
             </Link>
