@@ -187,3 +187,33 @@ export const getPaymentReceiptEmail = (name: string, date: string, appointmentId
     </div>
   `;
 };
+
+export const getAppointmentRescheduledEmail = (name: string, date: string, time: string) => {
+  return `
+    <div style="${baseStyles}">
+      <div style="${headerStyles}">
+        <h1 style="color: #132573; margin: 0;">Ankit Gaur Clinic</h1>
+      </div>
+      <div style="font-size: 16px; line-height: 1.6;">
+        <p>Dear <strong>${name}</strong>,</p>
+        <p>Your appointment has been successfully rescheduled.</p>
+        
+        <div style="background-color: #E6F1F7; padding: 20px; border-radius: 12px; margin: 25px 0; border: 1px solid #c2dbe9;">
+          <h3 style="margin-top: 0; color: #132573;">New Appointment Details</h3>
+          <p style="margin: 5px 0;"><strong>Date:</strong> ${date}</p>
+          <p style="margin: 5px 0;"><strong>Time:</strong> ${time}</p>
+          <p style="margin: 5px 0;"><strong>Status:</strong> <span style="color: #f59e0b; font-weight: bold;">PENDING CONFIRMATION</span></p>
+        </div>
+
+        <p>Our staff will review the new requested slot and you will receive another email once your new time is confirmed.</p>
+        
+        <p>If you need further assistance, please contact our clinic.</p>
+        
+        <p style="margin-top: 30px;">Best Regards,<br/><strong>The Ankit Gaur Clinic Team</strong></p>
+      </div>
+      <div style="${footerStyles}">
+        <p>© ${new Date().getFullYear()} Ankit Gaur Clinic. All rights reserved.</p>
+      </div>
+    </div>
+  `;
+};

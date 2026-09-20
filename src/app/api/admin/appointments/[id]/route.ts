@@ -42,12 +42,88 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
 
   try {
     const { id } = await params;
-    const { status, paymentStatus, transactionId } = await request.json();
+    const { status, paymentStatus, transactionId, action, date, time } = await request.json();
     
     const existingAppt = await prisma.appointment.findUnique({ where: { id } });
     if (!existingAppt) return new NextResponse('Appointment not found', { status: 404 });
 
-    // We can update either status, or payment info, or both
+    // --- RESCHEDULE LOGIC ---
+    if (action === 'RESCHEDULE') {
+      if (!date || !time) {
+        return new NextResponse('Missing new date or time for rescheduling', { status: 400 });
+      }
+
+      // Check 2-hour rule for RECEPTIONISTS
+      if (auth.role === 'RECEPTION') {
+        const aptDate = new Date(existingAppt.date);
+        const [timePart, modifier] = existingAppt.time.split(' ');
+        let [hours, minutes] = timePart.split(':').map(Number);
+        
+        if (modifier === 'PM' && hours < 12) hours += 12;
+        if (modifier === 'AM' && hours === 12) hours = 0;
+        
+        aptDate.setUTCHours(hours - 5, minutes - 30, 0, 0); // Convert IST to UTC
+        
+        const now = new Date();
+        const diffMs = aptDate.getTime() - now.getTime();
+        const diffHours = diffMs / (1000 * 60 * 60);
+
+        if (diffHours >= 0 && diffHours < 2) {
+          return new NextResponse('Cannot reschedule: Appointment is less than 2 hours away. Please escalate to a Doctor or Admin.', { status: 400 });
+        }
+      }
+
+      const newDate = new Date(date);
+      newDate.setUTCHours(0, 0, 0, 0);
+
+      // Collision detection
+      const existing = await prisma.appointment.findFirst({
+        where: { date: newDate, time, status: { not: 'CANCELLED' } }
+      });
+      const blocked = await prisma.blockedSlot.findFirst({
+        where: { date: newDate, time }
+      });
+
+      if (existing || blocked) {
+        return new NextResponse('This slot is already booked or blocked.', { status: 409 });
+      }
+
+      // Keep status as CONFIRMED if Admin reschedules, unless it was PENDING
+      const newStatus = existingAppt.status === 'PENDING' ? 'PENDING' : 'CONFIRMED';
+
+      const updated = await prisma.appointment.update({
+        where: { id },
+        data: { date: newDate, time, status: newStatus }
+      });
+
+      // Audit Log
+      if (auth.adminId) {
+        await prisma.auditLog.create({
+          data: {
+            adminId: auth.adminId,
+            action: 'RESCHEDULED',
+            targetId: id,
+            details: `Rescheduled from ${new Date(existingAppt.date).toLocaleDateString()} ${existingAppt.time} to ${newDate.toLocaleDateString()} ${time}`,
+          }
+        });
+      }
+
+      // Send email
+      const { getAppointmentRescheduledEmail } = await import('@/lib/email-templates');
+      try {
+        await sendEmail({
+          to: updated.email,
+          subject: 'Your Appointment has been Rescheduled',
+          html: getAppointmentRescheduledEmail(updated.name, new Date(updated.date).toLocaleDateString(), updated.time),
+        });
+      } catch (e) {
+        console.error('Email error:', e);
+      }
+
+      return NextResponse.json(updated);
+    }
+
+    // --- STANDARD UPDATE LOGIC ---
     const updateData: any = {};
     
     if (status) {

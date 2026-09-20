@@ -187,6 +187,7 @@ export default function AdminDashboardClient({
                           initialStatus={apt.status} 
                           userRole={role} 
                           appointmentDate={apt.date}
+                          doctorId={apt.doctorId}
                         />
                       </td>
                     </motion.tr>
