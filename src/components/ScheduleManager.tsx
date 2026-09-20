@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { TIME_SLOTS } from '@/lib/constants';
 
 export default function ScheduleManager({ role, adminId }: { role: string | null, adminId: string | null }) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [blockedSlots, setBlockedSlots] = useState<any[]>([]);
   const [doctors, setDoctors] = useState<{id: string, name: string | null, email: string}[]>([]);
   
@@ -44,7 +45,9 @@ export default function ScheduleManager({ role, adminId }: { role: string | null
   };
 
   useEffect(() => {
+     
     fetchBlockedSlots();
+     
     fetchDoctors();
   }, []);
 
@@ -76,8 +79,9 @@ export default function ScheduleManager({ role, adminId }: { role: string | null
       fetchBlockedSlots();
       
       setTimeout(() => setStatus(null), 3000);
-    } catch (error: any) {
-      setStatus({ type: 'error', message: error.message });
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
+      setStatus({ type: 'error', message: errorMessage });
     } finally {
       setIsLoading(false);
     }

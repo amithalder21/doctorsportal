@@ -1,8 +1,16 @@
+"use client";
+
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 
 export default function Header() {
   return (
-    <header className="fixed w-full top-0 z-50 bg-white/90 backdrop-blur-md shadow-sm">
+    <motion.header 
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ type: 'spring', stiffness: 100, damping: 20 }}
+      className="fixed w-full top-0 z-50 bg-white/90 backdrop-blur-md shadow-sm"
+    >
       <div className="container mx-auto px-6 py-4 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-3 group">
           <div className="bg-salute-primary text-white p-2 rounded-xl group-hover:bg-salute-secondary transition-colors shadow-sm">
@@ -31,6 +39,6 @@ export default function Header() {
           </button>
         </div>
       </div>
-    </header>
+    </motion.header>
   );
 }

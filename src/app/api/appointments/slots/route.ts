@@ -49,7 +49,7 @@ export async function GET(request: NextRequest) {
 
     const { TIME_SLOTS } = await import('@/lib/constants');
     let isHoliday = false;
-    let specificBlockedTimes = new Set<string>();
+    const specificBlockedTimes = new Set<string>();
 
     for (const slot of blockedSlotsRecords) {
       if (!slot.time || !slot.endTime) {

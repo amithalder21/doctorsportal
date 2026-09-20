@@ -7,8 +7,16 @@ export default function Hero() {
   return (
     <section className="relative w-full min-h-[90vh] flex items-center justify-center bg-salute-light overflow-hidden">
       {/* Abstract Background Shapes */}
-      <div className="absolute top-0 right-0 w-2/3 h-full bg-salute-accent rounded-bl-[100px] z-0 opacity-40"></div>
-      <div className="absolute -bottom-20 -left-20 w-96 h-96 bg-salute-secondary rounded-full mix-blend-multiply filter blur-3xl opacity-20 z-0"></div>
+      <motion.div 
+        animate={{ y: [0, -20, 0], opacity: [0.4, 0.5, 0.4] }} 
+        transition={{ repeat: Infinity, duration: 8, ease: "easeInOut" }}
+        className="absolute top-0 right-0 w-2/3 h-full bg-salute-accent rounded-bl-[100px] z-0"
+      ></motion.div>
+      <motion.div 
+        animate={{ y: [0, 30, 0], x: [0, 20, 0], opacity: [0.2, 0.3, 0.2] }}
+        transition={{ repeat: Infinity, duration: 10, ease: "easeInOut" }}
+        className="absolute -bottom-20 -left-20 w-96 h-96 bg-salute-secondary rounded-full mix-blend-multiply filter blur-3xl z-0"
+      ></motion.div>
       
       <div className="container mx-auto px-6 relative z-10 grid md:grid-cols-2 gap-12 items-center py-20">
         <motion.div 
@@ -22,15 +30,20 @@ export default function Hero() {
           </div>
           <h1 className="text-5xl md:text-7xl font-bold text-salute-dark leading-tight font-heading">
             Empowering <br />
-            <span className="text-salute-primary">Women's Health</span>
+            <span className="text-salute-primary">Women&apos;s Health</span>
           </h1>
           <p className="text-lg md:text-xl text-gray-600 max-w-lg leading-relaxed">
             Providing compassionate, state-of-the-art gynecological and obstetric care tailored to your unique needs. Experience the highest standard of clinical excellence with Dr. Ankit Gaur.
           </p>
           <div className="pt-6 flex flex-wrap gap-4">
-            <a href="#services" className="inline-block px-8 py-4 bg-salute-secondary hover:bg-[#ff7575] text-white rounded font-bold transition-all shadow-[0_10px_20px_-10px_rgba(255,141,141,0.5)] hover:shadow-[0_15px_25px_-10px_rgba(255,141,141,0.6)] hover:-translate-y-1 text-sm uppercase tracking-wide text-center">
+            <motion.a 
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              href="#services" 
+              className="inline-block px-8 py-4 bg-salute-secondary hover:bg-[#ff7575] text-white rounded font-bold shadow-[0_10px_20px_-10px_rgba(255,141,141,0.5)] text-sm uppercase tracking-wide text-center"
+            >
               Explore Services
-            </a>
+            </motion.a>
           </div>
         </motion.div>
         

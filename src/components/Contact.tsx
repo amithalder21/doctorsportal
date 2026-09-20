@@ -39,7 +39,9 @@ export default function Contact({ onBookingComplete }: { onBookingComplete?: () 
 
   useEffect(() => {
     if (!date || !doctorId) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setBookedSlots([]);
+       
       setIsHoliday(false);
       return;
     }
@@ -145,8 +147,9 @@ export default function Contact({ onBookingComplete }: { onBookingComplete?: () 
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }
-    } catch (err: any) {
-      setStatus({ type: 'error', message: err.message });
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'An unexpected error occurred';
+      setStatus({ type: 'error', message: errorMessage });
     }
   };
 

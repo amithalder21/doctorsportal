@@ -91,7 +91,9 @@ export default function Services() {
             <motion.div 
               key={index}
               variants={itemVariants}
-              className="bg-white rounded-tr-[40px] rounded-bl-[40px] p-10 shadow-[0_10px_40px_-15px_rgba(0,0,0,0.05)] hover:shadow-[0_20px_50px_-15px_rgba(19,37,115,0.15)] transition-all duration-300 border border-salute-accent group relative overflow-hidden"
+              whileHover={{ scale: 1.03, y: -5 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              className="bg-white rounded-tr-[40px] rounded-bl-[40px] p-10 shadow-[0_10px_40px_-15px_rgba(0,0,0,0.05)] hover:shadow-[0_20px_50px_-15px_rgba(19,37,115,0.15)] border border-salute-accent group relative overflow-hidden cursor-default"
             >
               <div className="absolute top-0 right-0 w-32 h-32 bg-salute-light rounded-bl-[100px] z-0 transition-all duration-300 group-hover:bg-salute-accent"></div>
               
