@@ -15,6 +15,7 @@ export default function Contact({ onBookingComplete }: { onBookingComplete?: () 
   const [bookedSlots, setBookedSlots] = useState<string[]>([]);
   const [isHoliday, setIsHoliday] = useState(false);
   const [isLoadingSlots, setIsLoadingSlots] = useState(false);
+  const [lastRefreshed, setLastRefreshed] = useState<Date | null>(null);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -41,32 +42,49 @@ export default function Contact({ onBookingComplete }: { onBookingComplete?: () 
     if (!date || !doctorId) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setBookedSlots([]);
-       
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsHoliday(false);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setLastRefreshed(null);
       return;
     }
 
-    const fetchBookedSlots = async () => {
-      setIsLoadingSlots(true);
+    const fetchBookedSlots = async (isBackgroundPoll = false) => {
+      if (!isBackgroundPoll) setIsLoadingSlots(true);
       try {
         const res = await fetch(`/api/appointments/slots?date=${date}&doctorId=${doctorId}`);
         const data = await res.json();
         if (res.ok) {
-          setBookedSlots(data.bookedSlots || []);
+          setBookedSlots(prevSlots => {
+            // Check if the currently selected time slot was just booked by someone else
+            if (timeSlot && (data.isHoliday || data.bookedSlots?.includes(timeSlot))) {
+              // Only alert if it wasn't already booked in our state
+              if (!prevSlots.includes(timeSlot)) {
+                setStatus({ type: 'error', message: `The time slot at ${timeSlot} was just booked by someone else. Please choose another time.` });
+                setTimeSlot('');
+              }
+            }
+            return data.bookedSlots || [];
+          });
           setIsHoliday(data.isHoliday || false);
-          // If the currently selected time slot is now booked or it's a holiday, unselect it
-          if (timeSlot && (data.isHoliday || data.bookedSlots?.includes(timeSlot))) {
-            setTimeSlot('');
-          }
+          setLastRefreshed(new Date());
         }
       } catch (err) {
         console.error('Failed to fetch booked slots', err);
       } finally {
-        setIsLoadingSlots(false);
+        if (!isBackgroundPoll) setIsLoadingSlots(false);
       }
     };
 
-    fetchBookedSlots();
+    // Fetch immediately
+    fetchBookedSlots(false);
+
+    // Then poll every 10 seconds for real-time updates
+    const interval = setInterval(() => {
+      fetchBookedSlots(true);
+    }, 10000);
+
+    return () => clearInterval(interval);
   }, [date, doctorId, timeSlot]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -270,8 +288,19 @@ export default function Contact({ onBookingComplete }: { onBookingComplete?: () 
                 </div>
               </div>
 
-              <div className="space-y-3 mb-6 relative z-10">
+              <div className="flex items-center justify-between mb-6 relative z-10">
                 <label className="text-sm font-bold text-white/80 uppercase tracking-wide">Available Times</label>
+                {lastRefreshed && !isLoadingSlots && (
+                  <div className="flex items-center gap-2">
+                    <span className="relative flex h-2.5 w-2.5">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+                    </span>
+                    <span className="text-xs text-white/60 font-medium">Live</span>
+                  </div>
+                )}
+              </div>
+              <div className="space-y-3 mb-6 relative z-10">
                 {(!date || !doctorId) ? (
                   <div className="p-4 rounded-xl border border-dashed border-white/30 text-center text-white/70 text-sm font-medium">
                     Please select a doctor and date first to view available slots.
