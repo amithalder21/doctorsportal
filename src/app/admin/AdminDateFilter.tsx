@@ -17,7 +17,7 @@ export default function AdminDateFilter() {
   };
 
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex flex-wrap items-center gap-3">
       <label htmlFor="dateFilter" className="text-sm font-bold text-gray-600">
         Filter by Date:
       </label>

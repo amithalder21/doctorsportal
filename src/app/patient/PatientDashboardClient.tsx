@@ -130,16 +130,18 @@ export default function PatientDashboardClient({ user, patientName, patientPhone
             className="space-y-6"
           >
             {appointments.length === 0 ? (
-              <motion.div variants={itemVariants} className="bg-white rounded-[30px] p-12 text-center shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100">
-                <div className="w-24 h-24 bg-salute-accent/30 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <svg className="w-12 h-12 text-salute-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+              <motion.div variants={itemVariants} className="bg-white rounded-[30px] p-12 text-center shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-salute-primary to-salute-secondary"></div>
+                <div className="w-32 h-32 bg-salute-accent/20 rounded-full flex items-center justify-center mx-auto mb-8 relative">
+                  <div className="absolute inset-0 bg-salute-accent/30 rounded-full animate-ping opacity-20"></div>
+                  <svg className="w-16 h-16 text-salute-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                   </svg>
                 </div>
-                <h3 className="text-2xl font-bold text-salute-dark mb-3 font-heading">No Appointments Yet</h3>
-                <p className="text-gray-500 mb-8 max-w-md mx-auto">You haven't scheduled any appointments. Book your first visit to start your health journey with us.</p>
-                <Link href="/#contact" className="inline-flex bg-salute-secondary hover:bg-[#ff7575] text-white px-8 py-3 rounded-xl font-bold shadow-md transition-all hover:-translate-y-0.5">
-                  Book Now
+                <h3 className="text-3xl font-bold text-salute-dark mb-4 font-heading">Your Health Journey Starts Here</h3>
+                <p className="text-gray-500 mb-8 max-w-md mx-auto text-lg leading-relaxed">It looks like you don't have any upcoming or past appointments. Schedule a visit to meet with Dr. Priya Sharma.</p>
+                <Link href="/#contact" className="inline-flex bg-salute-primary hover:bg-salute-secondary text-white px-10 py-4 rounded-xl font-bold shadow-xl transition-all hover:-translate-y-1 text-lg">
+                  Book Your First Visit
                 </Link>
               </motion.div>
             ) : (
@@ -164,7 +166,7 @@ export default function PatientDashboardClient({ user, patientName, patientPhone
                     </span>
                   </div>
                   
-                  <div className="flex-grow space-y-3 relative z-10">
+                  <div className="flex-grow space-y-3 relative z-10 overflow-hidden">
                     <div className="flex flex-wrap items-center gap-3">
                       <h3 className="text-2xl font-bold text-salute-dark font-heading">{apt.time}</h3>
                       <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${getStatusColor(apt.status)}`}>
@@ -178,7 +180,7 @@ export default function PatientDashboardClient({ user, patientName, patientPhone
                         {apt.paymentStatus}
                       </span>
                       {apt.id.startsWith('UIQ-') && (
-                        <span className="text-[10px] font-mono text-gray-400 bg-gray-50 border border-gray-100 px-2 py-1 rounded-md ml-auto">
+                        <span className="text-[10px] font-mono text-gray-400 bg-gray-50 border border-gray-100 px-2 py-1 rounded-md">
                           Ref: {apt.id}
                         </span>
                       )}

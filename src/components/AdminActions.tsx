@@ -116,7 +116,7 @@ export default function AdminActions({ id, initialStatus, userRole, appointmentD
         {canEdit && !isTerminalState && (
           <button
             onClick={() => setIsModalOpen(true)}
-            className="p-1.5 text-gray-400 hover:text-blue-500 hover:bg-blue-50 rounded-lg transition-colors"
+            className="p-2.5 text-gray-400 hover:text-blue-500 hover:bg-blue-50 rounded-lg transition-colors"
             title="Reschedule Appointment"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -129,7 +129,7 @@ export default function AdminActions({ id, initialStatus, userRole, appointmentD
           <button
             onClick={handleDelete}
             disabled={isDeleting}
-            className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
+            className="p-2.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
             title="Delete Request"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
