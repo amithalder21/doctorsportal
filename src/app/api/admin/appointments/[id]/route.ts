@@ -65,6 +65,29 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
         }
       }
 
+      if (status === 'CANCELLED' && auth.role !== 'SUPERADMIN') {
+        // Construct precise appointment time (IST)
+        const aptDate = new Date(existingAppt.date);
+        const [timePart, modifier] = existingAppt.time.split(' ');
+        let [hours, minutes] = timePart.split(':').map(Number);
+        
+        if (modifier === 'PM' && hours < 12) hours += 12;
+        if (modifier === 'AM' && hours === 12) hours = 0;
+        
+        // Appointments are inherently in IST for this clinic context
+        // Set the hours and minutes in local time (which Vercel handles as UTC, so we subtract IST offset to be exact, or just use UTC representation safely since server is UTC).
+        // Actually, simple and robust way: Create UTC date and assume the 10:00 AM meant IST.
+        aptDate.setUTCHours(hours - 5, minutes - 30, 0, 0); // Convert IST (UTC+5:30) to UTC precisely
+
+        const now = new Date();
+        const diffMs = aptDate.getTime() - now.getTime();
+        const diffHours = diffMs / (1000 * 60 * 60);
+
+        if (diffHours >= 0 && diffHours < 2) {
+          return new NextResponse('Cannot cancel: Appointment is less than 2 hours away.', { status: 400 });
+        }
+      }
+
       updateData.status = status;
     }
 

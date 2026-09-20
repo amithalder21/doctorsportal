@@ -35,6 +35,24 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
         return new NextResponse('Cannot cancel a completed or already cancelled appointment', { status: 400 });
     }
 
+    // Construct precise appointment time (IST)
+    const aptDate = new Date(appointment.date);
+    const [timePart, modifier] = appointment.time.split(' ');
+    let [hours, minutes] = timePart.split(':').map(Number);
+    
+    if (modifier === 'PM' && hours < 12) hours += 12;
+    if (modifier === 'AM' && hours === 12) hours = 0;
+    
+    aptDate.setUTCHours(hours - 5, minutes - 30, 0, 0); // Convert IST to UTC
+
+    const now = new Date();
+    const diffMs = aptDate.getTime() - now.getTime();
+    const diffHours = diffMs / (1000 * 60 * 60);
+
+    if (diffHours >= 0 && diffHours < 2) {
+      return new NextResponse('Cannot cancel: Appointment is less than 2 hours away. Please contact the clinic directly.', { status: 400 });
+    }
+
     const updated = await prisma.appointment.update({
       where: { id },
       data: { status: 'CANCELLED' }

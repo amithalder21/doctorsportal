@@ -25,13 +25,14 @@ export default function PatientCancelButton({ appointmentId, status }: { appoint
       });
 
       if (!res.ok) {
-        throw new Error('Failed to cancel appointment');
+        const errorText = await res.text();
+        throw new Error(errorText || 'Failed to cancel appointment');
       }
 
       router.refresh();
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      alert('Failed to cancel appointment. Please try again or contact the clinic.');
+      alert(error.message || 'Failed to cancel appointment. Please try again or contact the clinic.');
       setIsCancelling(false);
     }
   };

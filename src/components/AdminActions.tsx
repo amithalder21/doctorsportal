@@ -41,11 +41,14 @@ export default function AdminActions({ id, initialStatus, userRole, appointmentD
         body: JSON.stringify({ status: newStatus })
       });
       
-      if (!res.ok) throw new Error('Failed to update status');
+      if (!res.ok) {
+        const errorText = await res.text();
+        throw new Error(errorText || 'Failed to update status');
+      }
       router.refresh();
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      alert('Failed to update status.');
+      alert(error.message || 'Failed to update status.');
       setStatus(initialStatus); // Revert on failure
     } finally {
       setIsUpdating(false);
