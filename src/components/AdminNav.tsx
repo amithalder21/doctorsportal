@@ -62,7 +62,7 @@ export default function AdminNav({ role, name }: { role: string | null, name?: s
             <span className="bg-white/20 px-3 py-1 rounded-full text-xs font-bold tracking-wider uppercase">
               {role || 'Unknown'}
             </span>
-            <LogoutButton />
+            <LogoutButton className="bg-white/10 hover:bg-[#ff7575] text-white border border-white/10 hover:border-transparent" />
           </div>
         </div>
       </div>
